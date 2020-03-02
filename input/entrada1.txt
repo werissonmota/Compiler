@@ -14,19 +14,46 @@ var { int birulau, deas;
       typedef struct xandAviao extends cleitonRasta{
       var { boolean dsa;} } 
 }
+procedure start(){
+       var { int j;}
+	   read(a);
+	   print(a);
+	   //i = 5;
+	   
+	   
+	   
+        while( i == j){
+		 
+		} 
+		
+		if(i == j)then{
+		 read(a);
+		
+		}else{
+		
+		}	
+	
+}
 
-procedure sss(){
+function int sss(){
        var { int j;}
 	   read(a);
 	   print(a);
 	   i = 5;
-	   /*
-        while( i == j){
+	   
+	   
+	   
+        while( i == 5){
 		 
-		} */
+		} 
 		
+		if(i == j)then{
+		 read(a);
 		
-	
+		}else{
+		
+		}	
+	return 0;
 }
 
 

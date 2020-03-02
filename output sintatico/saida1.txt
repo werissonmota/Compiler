@@ -1,4 +1,1 @@
-Line 22 syntactic error: expression identifier or string expected
-Line 22 syntactic error: ; expected
-Line 22 syntactic error: commnds expected
-Line 22 syntactic error: } expected
+Sem erros sintáticos

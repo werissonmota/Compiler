@@ -713,14 +713,8 @@ public class Parser {
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
                 commands();
-
-                if (token == null) {
-                    return;
-                }
-                //returns();
-                if (token == null) {
-                    return;
-                }
+                returns();
+                
             } else {
                 setErro(token.getLinha(), "} expected");
                 // erro("function");
@@ -741,10 +735,10 @@ public class Parser {
             if (token == null) {
                 setErro("identifier expected");
                 return;
-            } else if (token.getTipo().equals("IDE")) {
+            } else if (token.getTipo().equals("IDE") || token.getLexema().equals("start")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                setErro(token.getLinha(), "identifier expected");
                 // erro("function");
             }
 
@@ -874,7 +868,7 @@ public class Parser {
 
     public void commands() throws IOException {
         if (token == null) {
-            setErro("Commands expected"); 
+            setErro("Commands expected");
             return;
         } else if (token.getLexema().equals("if")) {
             ifStatemant();
@@ -888,24 +882,7 @@ public class Parser {
         } else if (token.getLexema().equals("print")) {
             printStatemant();
             commands();
-        } else if (token.getTipo().equals("IDE")) {
-            token = proximoToken();
-            if(token == null){
-                setErro("= or ( expected");
-                return;
-            }else if(token.getLexema().equals("=")){
-                token = proximoToken();
-                assign2();
-                if(token == null){
-                    setErro("; expected");
-                    return;
-                }else if(token.getLexema().equals(";")){
-                    token = proximoToken();                    
-                }
-            }else if(token.getLexema().equals("local") || token.getLexema().equals("global")){
-                
-            }
-            
+        } else if (token.getTipo().equals("IDE") || token.getLexema().equals("local") || token.getLexema().equals("global")) {
             assignment();
             commands();
         } else if (token.getLexema().equals("}") || token.getLexema().equals("return")) {
@@ -934,10 +911,19 @@ public class Parser {
             return;
         } else if (token.getLexema().equals("return")) {
             token = proximoToken();
-            expression();
+            System.out.println(token.getLexema());
             if (token == null) {
+                setErro("return type expected");
                 return;
+            } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NRO")) {
+                
+                token = proximoToken();
+            } else {
+                relationalExp();
             }
+        } else {
+            setErro(token.getLinha(), "return expected");
+            //erro();
         }
 
         if (token == null) {
@@ -1286,7 +1272,7 @@ public class Parser {
 
         } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
                 || token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
-                || token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")
+                || token.getTipo().equals("NRO") || token.getLexema().equals("true") || token.getLexema().equals("false")
                 || token.getLexema().equals("!")) {
             unaryOp();
 
@@ -1309,15 +1295,16 @@ public class Parser {
         if (token == null) {
             setErro("expression expected");
             return;
-        } else if (token.getTipo().equals("IDE")) {
-            callProcedureFunction();
+        } else if (token.getTipo().equals("IDE") || token.getLexema().equals("global") || token.getLexema().equals("local")) {
+            token = proximoToken();
         } else if (token.getTipo().equals("CDC")) {
             token = proximoToken();
-        } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
-                || token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
-                || token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")
+        } else if (token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
+                || token.getLexema().equals("true") || token.getLexema().equals("false")
                 || token.getLexema().equals("!")) {
             expression();
+        } else if (token.getTipo().equals("NRO")) {
+            token = proximoToken();
         } else {
             setErro(token.getLinha(), "expression identifier or string expected");
             //erro();
@@ -1343,7 +1330,7 @@ public class Parser {
         } else if (token.getLexema().equals("(")) {
             token = proximoToken();
             logicalExp();
-            
+
             if (token == null) {
                 setErro(") expected");
                 return;
@@ -1367,9 +1354,9 @@ public class Parser {
         } else if (token.getLexema().equals("&&") || token.getLexema().equals("||")) {
             token = proximoToken();
             logicalExp();
-        }else if(token.getLexema().equals(")")){
-          //vazio  
-        }else {
+        } else if (token.getLexema().equals(")")) {
+            //vazio  
+        } else {
             setErro(token.getLinha(), "&& or || expected");
             //erro();
         }
@@ -1401,8 +1388,6 @@ public class Parser {
             aritmeticExp();
             inequalityExp();
             equalityExp();
-
-            
 
         } else {
             setErro(token.getLinha(), "!= == > < >= <=  expected");
@@ -1474,52 +1459,6 @@ public class Parser {
         }
     }
 
-    /*
-    public void aritmeticExp() throws IOException {
-        if (token == null) {
-            setErro("Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
-            return;
-            //primeiro unary Op
-        } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
-                || token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
-                || token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")
-                || token.getLexema().equals("!")) {        
-
-            operation();
-            if (token == null) {
-                return;
-            }
-            opSum();
-
-        }else if(token.getLexema().equals("(")){  
-            token = proximoToken();
-             if(token == null){
-                 setErro("expected");
-                 return;
-              //primeiro aritimetic   
-             }else if (token.getLexema().equals("(")) {              
-                token = proximoToken();
-                //relationalExp();
-                
-                if (token == null) {
-                    setErro(") expected");
-                    return;
-                } else if (token.getLexema().equals(")")) {
-                    token = proximoToken();
-                } else {
-                    setErro(token.getLinha(), ") expected");
-                    //erro();
-                }
-
-            }
-        }
-        else {
-            setErro(token.getLinha(), "Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
-            //erro();
-        }
-
-    }
-     */
 //*************** OPERATION ***************************************************************************
     public void operation() throws IOException {
         if (token == null) {
@@ -1537,15 +1476,15 @@ public class Parser {
             return;
         } else if (token.getLexema().equals("+") || token.getLexema().equals("-")) {
             token = proximoToken();
-            operation();            
+            operation();
             opSum();
         } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
                 || token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
-                || token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")
+                || token.getTipo().equals("NRO") || token.getLexema().equals("true") || token.getLexema().equals("false")
                 || token.getLexema().equals("!") || token.getLexema().equals("==") || token.getLexema().equals("!=")
                 || token.getLexema().equals(">") || token.getLexema().equals("<") || token.getLexema().equals(">=")
                 || token.getLexema().equals("<=") || token.getLexema().equals(")") || token.getLexema().equals(";")) {
-            
+
             //vazio           
         } else {
             setErro(token.getLinha(), "+ or - expected");
@@ -1558,10 +1497,10 @@ public class Parser {
         if (token == null) {
             setErro("/ or * expected");
             return;
-            
+
         } else if (token.getLexema().equals("/") || token.getLexema().equals("*")) {
             token = proximoToken();
-            opUnary();          
+            opUnary();
             opMultiplication();
         } else if (token.getLexema().equals("+") || token.getLexema().equals("-")
                 || token.getLexema().equals("==") || token.getLexema().equals("!=")
@@ -1581,16 +1520,16 @@ public class Parser {
             return;
         } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
                 || token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
-                || token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")
+                || token.getTipo().equals("NRO") || token.getLexema().equals("true") || token.getLexema().equals("false")
                 || token.getLexema().equals("!")) {
-                
-            if (token.getLexema().equals("global") || token.getLexema().equals("local") || token.getTipo().equals("NUM")
+
+            if (token.getLexema().equals("global") || token.getLexema().equals("local") || token.getTipo().equals("NRO")
                     || token.getLexema().equals("true") || token.getLexema().equals("false")) {
                 finalValue();
                 if (token.getLexema().equals("++") || token.getLexema().equals("--")) {
                     token = proximoToken();
                 }
-            } else {    
+            } else {
                 unaryOp();
             }
 
@@ -1621,12 +1560,12 @@ public class Parser {
             finalValue();
         } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
                 || token.getTipo().equals("IDE") || token.getLexema().equals("true") || token.getLexema().equals("false")
-                || token.getTipo().equals("NUM")) {
+                || token.getTipo().equals("NRO")) {
             finalValue();
             if (token == null) {
                 setErro("++ or -- expected");
                 return;
-            }else if (token.getLexema().equals("++") || token.getLexema().equals("--")) {
+            } else if (token.getLexema().equals("++") || token.getLexema().equals("--")) {
                 token = proximoToken();
             }
         } else if (token.getLexema().equals("!")) {
@@ -1647,7 +1586,7 @@ public class Parser {
         }
         if (token.getLexema().equals("global") || token.getLexema().equals("local") || token.getTipo().equals("IDE")) {
             modifier();
-        } else if (token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")) {
+        } else if (token.getTipo().equals("NRO") || token.getLexema().equals("true") || token.getLexema().equals("false")) {
             token = proximoToken();
         } else {
             setErro(token.getLinha(), "final value expected");
@@ -1738,7 +1677,7 @@ public class Parser {
             if (token == null) {
                 setErro("number or modifier expected");
                 return;
-            } else if (token.getTipo().equals("NUM")) {
+            } else if (token.getTipo().equals("NRO")) {
                 token = proximoToken();
             } else if (token.getLexema().equals("global") || token.getLexema().equals("local") || token.getTipo().equals("IDE")) {
                 callVariable();
@@ -1800,7 +1739,7 @@ public class Parser {
         if (token == null) {
             setErro("values param or modifiers expected");
             return;
-        } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NUM")
+        } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NRO")
                 || token.getTipo().equals("CDC") || token.getTipo().equals("IDE") || token.getLexema().equals("global")
                 || token.getLexema().equals("local")) {
             realParam();
@@ -1818,7 +1757,7 @@ public class Parser {
         if (token == null) {
             setErro("( expected");
             return;
-        } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NUM")
+        } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NRO")
                 || token.getTipo().equals("CDC")) {
             valueParam();
         } else if (token.getTipo().equals("IDE") || token.getLexema().equals("global") || token.getLexema().equals("local")) {
@@ -1838,7 +1777,7 @@ public class Parser {
             if (token == null) {
                 setErro("values param or modifiers expected");
                 return;
-            } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NUM")
+            } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NRO")
                     || token.getTipo().equals("CDC") || token.getTipo().equals("IDE") || token.getLexema().equals("global")
                     || token.getLexema().equals("local")) {
                 realParam();
@@ -1856,7 +1795,7 @@ public class Parser {
         if (token == null) {
             setErro(") or params expected");
             return;
-        } else if (token.getTipo().equals("NUM")) {
+        } else if (token.getTipo().equals("NRO")) {
             token = proximoToken();
         } else if (token.getTipo().equals("CDC")) {
             token = proximoToken();
