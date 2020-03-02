@@ -1,4 +1,4 @@
-/*const { int biruley = 3;
+const { int biruley = 3;
 	boolean s = true;
 	string dd = "dsds";
 	real pi = 3.14;
@@ -15,21 +15,18 @@ var { int birulau, deas;
       var { boolean dsa;} } 
 }
 
-function int dancin(int testaParam, string testaParam2){
-var {real sde;}
-} 
-
-function dd testaTipoComposto(){
-var { int d; }
-
-}
-
 procedure sss(){
-var { int j;}
+       var { int j;}
+	   
+        while( i == j){
+		 x = 1;
+         read(a);
+		 print(b);
+		 //sss();
+		} 
+		
+		
+	
 }
-*/
-
-i > j;
-
 
 

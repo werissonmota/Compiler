@@ -131,8 +131,8 @@ public class Parser {
 //********************** INICIO DOS PROCEDIMENTOS ***************************************
 
     public void start() throws IOException {
-        
-        //globalValues();
+
+        globalValues();
         if (token == null) {
             return;
         }
@@ -712,7 +712,7 @@ public class Parser {
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
-                //commands();
+                commands();
 
                 if (token == null) {
                     return;
@@ -751,12 +751,9 @@ public class Parser {
             if (token == null) {
                 setErro("( expected");
                 return;
-            } else if (token.getTipo().equals("(")) {
+            } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
                 paramList();
-                if (token == null) {
-                    return;
-                }
             } else {
                 setErro(token.getLinha(), ") expected");
                 // erro("function");
@@ -811,10 +808,7 @@ public class Parser {
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
-                //commands();
-                if (token == null) {
-                    return;
-                }
+                commands();
             } else {
                 setErro(token.getLinha(), "} expected");
                 // erro("function");
@@ -880,25 +874,50 @@ public class Parser {
 
     public void commands() throws IOException {
         if (token == null) {
-            setErro("Commands expected"); // caso for nulo o erro é de ausência de return para funções e "}" para procedimentos
+            setErro("Commands expected"); 
             return;
         } else if (token.getLexema().equals("if")) {
             ifStatemant();
+            commands();
         } else if (token.getLexema().equals("while")) {
             whileStatemant();
+            commands();
         } else if (token.getLexema().equals("read")) {
             readStatemant();
+            commands();
         } else if (token.getLexema().equals("print")) {
             printStatemant();
+            commands();
         } else if (token.getTipo().equals("IDE")) {
+            token = proximoToken();
+            if(token == null){
+                setErro("= or ( expected");
+                return;
+            }else if(token.getLexema().equals("=")){
+                token = proximoToken();
+                assign2();
+                if(token == null){
+                    setErro("; expected");
+                    return;
+                }else if(token.getLexema().equals(";")){
+                    token = proximoToken();                    
+                }
+            }else if(token.getLexema().equals("local") || token.getLexema().equals("global")){
+                
+            }
+            
             assignment();
+            commands();
+        } else if (token.getLexema().equals("}") || token.getLexema().equals("return")) {
+            //vazio
         }
     }
 //*************** COMMANDS EXPRESSIONS  **********************************************************************
 
     public void commandsExp() throws IOException {
         if (token == null) {
-            setErro("errrrr");
+            setErro("expression expected");
+            return;
         } else {
             relationalExp();
             if (token == null) {
@@ -938,16 +957,15 @@ public class Parser {
         if (token == null) {
             setErro("if expected");
             return;
-        }
-        if (token.getLexema().equals("if")) {
+        } else if (token.getLexema().equals("if")) {
             token = proximoToken();
+
             if (token == null) {
                 setErro("( expected");
                 return;
-            }
-            if (token.getLexema().equals("(")) {
+            } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
-                expression();
+                commandsExp();
             } else {
                 setErro(token.getLinha(), "( expected");
                 //erro("");
@@ -966,44 +984,35 @@ public class Parser {
             if (token == null) {
                 setErro("then expected");
                 return;
-            }
-            if (token.getLexema().equals("then")) {
+            } else if (token.getLexema().equals("then")) {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "then expected");
                 //erro();
             }
+
             if (token == null) {
                 setErro("{ expected");
                 return;
-            }
-            if (token.getLexema().equals("{")) {
+            } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 commands();
             } else {
                 setErro(token.getLinha(), "{ expected");
                 //erro();
             }
-            if (token == null) {
-                setErro("Commands expected");
-                return;
-            }
-            //Se não achar o { o méto erro vai buscar o próximo token de sicronização que poderá ser os tokens de comando (if(condição){comandos})
-            if (token.getTipo().equals("PRE || IDE")) {
-                commands();
-            } else {
-                setErro("Commands expected");
-            }
 
-            if (token.getLexema().equals("}")) {
+            if (token == null) {
+                setErro("} expected");
+                return;
+            } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
+                elseStatemant();
             } else {
                 setErro(token.getLinha(), "} expected");
                 //erro();
             }
-            if (token.getLexema().equals("else")) {
-                elseStatemant();
-            }
+
         }
     }
 //*************** ELSE STATEMANT ***********************************************************
@@ -1013,37 +1022,35 @@ public class Parser {
         if (token == null) {
             setErro("else expected");
             return;
-        }
-        if (token.getLexema().equals("else")) {
+        } else if (token.getLexema().equals("else")) {
             token = proximoToken();
+
             if (token == null) {
                 setErro("{ expected");
                 return;
-            }
-            if (token.getLexema().equals("{")) {
+            } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 commands();
             } else {
                 setErro(token.getLinha(), "{ expected");
                 //erro("");
             }
-            if (token == null) {
-                setErro("Commands expected");
-                return;
-            }
-            if (token.getTipo().equals("PRE || IDE")) {
-                commands();
-            } else {
-                setErro("Commands expected");
-            }
 
-            if (token.getLexema().equals("}")) {
+            if (token == null) {
+                setErro("} expected");
+                return;
+            } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "} expected");
                 //erro();
             }
 
+        } else if (token.getLexema().equals("return") || token.getLexema().equals("}")) {
+            //vazio  
+        } else {
+            setErro(token.getLinha(), "else or } expected");
+            //erro();
         }
     }
 //*************** WHILE STATEMANT ***********************************************************
@@ -1052,16 +1059,14 @@ public class Parser {
         if (token == null) {
             setErro("while expected");
             return;
-        }
-        if (token.getLexema().equals("while")) {
+        } else if (token.getLexema().equals("while")) {
             token = proximoToken();
             if (token == null) {
                 setErro("( expected");
                 return;
-            }
-            if (token.getLexema().equals("(")) {
+            } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
-                expression();
+                commandsExp();
             } else {
                 setErro(token.getLinha(), "( expected");
                 //erro("");
@@ -1070,35 +1075,28 @@ public class Parser {
             if (token == null) {
                 setErro(") expected");
                 return;
-            }
-            if (token.getLexema().equals(")")) {
+            } else if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), ") expected");
                 //erro();
             }
+
             if (token == null) {
                 setErro("{ expected");
                 return;
-            }
-            if (token.getLexema().equals("{")) {
+            } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 commands();
             } else {
                 setErro(token.getLinha(), "{ expected");
                 //erro();
             }
-            if (token == null) {
-                setErro("Commands expected");
-                return;
-            }
-            if (token.getTipo().equals("PRE || IDE")) {
-                commands();
-            } else {
-                setErro("Commands expected");
-            }
 
-            if (token.getLexema().equals("}")) {
+            if (token == null) {
+                setErro("} expected");
+                return;
+            } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "} expected");
@@ -1114,6 +1112,9 @@ public class Parser {
             return;
         } else if (token.getLexema().equals("read")) {
             token = proximoToken();
+        } else {
+            setErro(token.getLinha(), "read expected");
+            //erro();
         }
 
         if (token == null) {
@@ -1152,13 +1153,7 @@ public class Parser {
     }
 
     public void readParams() throws IOException {
-        if (token == null) {
-            return;
-        }
         callVariable();
-        if (token == null) {
-            return;
-        }
         moreReadParams();
     }
 
@@ -1228,9 +1223,6 @@ public class Parser {
             return;
         }
         printParam();
-        if (token == null) {
-            return;
-        }
         morePrintParams();
 
     }
@@ -1255,6 +1247,7 @@ public class Parser {
             return;
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
+            printParams();
         } else if (token.getLexema().equals(")")) {
             //vazio
         } else {
@@ -1296,7 +1289,7 @@ public class Parser {
                 || token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")
                 || token.getLexema().equals("!")) {
             unaryOp();
-            
+
             if (token == null) {
                 setErro("; expected");
                 return;
@@ -1350,6 +1343,7 @@ public class Parser {
         } else if (token.getLexema().equals("(")) {
             token = proximoToken();
             logicalExp();
+            
             if (token == null) {
                 setErro(") expected");
                 return;
@@ -1373,7 +1367,9 @@ public class Parser {
         } else if (token.getLexema().equals("&&") || token.getLexema().equals("||")) {
             token = proximoToken();
             logicalExp();
-        } else {
+        }else if(token.getLexema().equals(")")){
+          //vazio  
+        }else {
             setErro(token.getLinha(), "&& or || expected");
             //erro();
         }
@@ -1405,6 +1401,8 @@ public class Parser {
             aritmeticExp();
             inequalityExp();
             equalityExp();
+
+            
 
         } else {
             setErro(token.getLinha(), "!= == > < >= <=  expected");
@@ -1529,9 +1527,6 @@ public class Parser {
             return;
         }
         opUnary();
-        if (token == null) {
-            return;
-        }
         opMultiplication();
     }
 
@@ -1542,15 +1537,15 @@ public class Parser {
             return;
         } else if (token.getLexema().equals("+") || token.getLexema().equals("-")) {
             token = proximoToken();
-            operation();
-            if (token == null) {
-                return;
-            }
+            operation();            
             opSum();
         } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
                 || token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
                 || token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")
-                || token.getLexema().equals("!")) {
+                || token.getLexema().equals("!") || token.getLexema().equals("==") || token.getLexema().equals("!=")
+                || token.getLexema().equals(">") || token.getLexema().equals("<") || token.getLexema().equals(">=")
+                || token.getLexema().equals("<=") || token.getLexema().equals(")") || token.getLexema().equals(";")) {
+            
             //vazio           
         } else {
             setErro(token.getLinha(), "+ or - expected");
@@ -1563,16 +1558,15 @@ public class Parser {
         if (token == null) {
             setErro("/ or * expected");
             return;
+            
         } else if (token.getLexema().equals("/") || token.getLexema().equals("*")) {
             token = proximoToken();
-            opUnary();
-            if (token == null) {
-                return;
-            }
+            opUnary();          
             opMultiplication();
         } else if (token.getLexema().equals("+") || token.getLexema().equals("-")
                 || token.getLexema().equals("==") || token.getLexema().equals("!=")
-                || token.getLexema().equals("/") || token.getLexema().equals("*")) {
+                || token.getLexema().equals("/") || token.getLexema().equals("*")
+                || token.getLexema().equals(")")) {
             //vazio
         } else {
             setErro(token.getLinha(), "/ or * expected");
@@ -1589,14 +1583,14 @@ public class Parser {
                 || token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
                 || token.getTipo().equals("NUM") || token.getLexema().equals("true") || token.getLexema().equals("false")
                 || token.getLexema().equals("!")) {
-
+                
             if (token.getLexema().equals("global") || token.getLexema().equals("local") || token.getTipo().equals("NUM")
                     || token.getLexema().equals("true") || token.getLexema().equals("false")) {
                 finalValue();
                 if (token.getLexema().equals("++") || token.getLexema().equals("--")) {
                     token = proximoToken();
                 }
-            } else {
+            } else {    
                 unaryOp();
             }
 
@@ -1630,9 +1624,9 @@ public class Parser {
                 || token.getTipo().equals("NUM")) {
             finalValue();
             if (token == null) {
+                setErro("++ or -- expected");
                 return;
-            }
-            if (token.getLexema().equals("++") || token.getLexema().equals("--")) {
+            }else if (token.getLexema().equals("++") || token.getLexema().equals("--")) {
                 token = proximoToken();
             }
         } else if (token.getLexema().equals("!")) {

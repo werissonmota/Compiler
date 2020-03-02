@@ -1,6 +1,0 @@
-Line 3 syntactic error: / or * expected
-Line 3 syntactic error: + or - expected
-Line 3 syntactic error: / or * expected
-Line 3 syntactic error: + or - expected
-Line 3 syntactic error: > < >= <= expected
-Line 3 syntactic error: && or || expected

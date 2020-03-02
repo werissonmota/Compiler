@@ -1,5 +1,1 @@
-Line 1 syntactic error: Unary OP, "!", number, booleans, modifiers, identifiers or "(" expected
-Line 1 syntactic error: / or * expected
-Line 1 syntactic error: + or - expected
-Line 1 syntactic error: != == > < >= <=  expected
-Line 1 syntactic error: && or || expected
+Sem erros sintáticos
