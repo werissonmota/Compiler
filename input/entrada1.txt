@@ -1,0 +1,35 @@
+/*const { int biruley = 3;
+	boolean s = true;
+	string dd = "dsds";
+	real pi = 3.14;
+}
+var { int birulau, deas;
+      string s;
+      boolean aux;
+      real x;
+      int array[2], array1[3];
+      int matriz[2][2], matriz2[2][3]; 
+      typedef struct dd extends hb20{ var { int j;} }
+      struct dd { var { int j;} }
+      typedef struct xandAviao extends cleitonRasta{
+      var { boolean dsa;} } 
+}
+
+function int dancin(int testaParam, string testaParam2){
+var {real sde;}
+} 
+
+function dd testaTipoComposto(){
+var { int d; }
+
+}
+
+procedure sss(){
+var { int j;}
+}
+*/
+
+i > j;
+
+
+
