@@ -17,13 +17,13 @@ var { int birulau, deas;
 
 procedure sss(){
        var { int j;}
-	   
+	   read(a);
+	   print(a);
+	   i = 5;
+	   /*
         while( i == j){
-		 x = 1;
-         read(a);
-		 print(b);
-		 //sss();
-		} 
+		 
+		} */
 		
 		
 	
