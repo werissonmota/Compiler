@@ -1,1 +1,2 @@
-Sem erros sintáticos
+Line 6 syntactic error: } expected
+Line 12 syntactic error: } expected

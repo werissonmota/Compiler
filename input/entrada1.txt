@@ -18,7 +18,7 @@ procedure start(){
        var { int j;}
 	   read(a);
 	   print(a);
-	   //i = 5;
+			i = 5;
 	   
 	   
 	   
