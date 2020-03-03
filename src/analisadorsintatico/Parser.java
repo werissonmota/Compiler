@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package analisadorsintatico;
 
 import analisadorlexico.Token;
@@ -57,7 +52,7 @@ public class Parser {
      *
      * @return Token a ser verificado
      */
-    public Token proximoToken() {
+    private Token proximoToken() {
         return (pilhaTokens.isEmpty()) ? null : pilhaTokens.pop();
     }
 
@@ -66,8 +61,8 @@ public class Parser {
      *
      * @throws IOException
      */
-    public void semErrosSintaticos() throws IOException {
-        fos.write("Sem erros sintáticos".getBytes());
+    private void semErrosSintaticos() throws IOException {
+        fos.write("Sucess! No syntactic errors".getBytes());
     }
 
     /**
@@ -75,7 +70,7 @@ public class Parser {
      *
      * @throws IOException
      */
-    public void fechaArquivos() throws IOException {
+    private void fechaArquivos() throws IOException {
         fos.close();
     }
 
@@ -86,7 +81,7 @@ public class Parser {
      * @param erro mensaem de erro
      * @throws IOException
      */
-    public void setErro(int linha, String erro) throws IOException {
+    private void setErro(int linha, String erro) throws IOException {
         fos.write("Line ".getBytes());
         fos.write(String.valueOf(linha).getBytes());
         fos.write(" ".getBytes());
@@ -101,7 +96,7 @@ public class Parser {
      * @param erro mensagem de erro a ser escrita
      * @throws IOException
      */
-    public void setErro(String erro) throws IOException {
+    private void setErro(String erro) throws IOException {
         fos.write("Syntactic error $ end of chain: ".getBytes());
         fos.write(erro.getBytes());
         fos.write("\n".getBytes());
@@ -111,7 +106,7 @@ public class Parser {
      * Método que utiliza o modo pânico para dar seguimento na varredura caso encontre um erro
      * @param tokenSinc
      */
-    public void erro(String tokenSinc[]) {
+    private void erro(String tokenSinc[]) {
         boolean verifica = false;
         while(token != null){
           for(String a: tokenSinc){
@@ -139,13 +134,13 @@ public class Parser {
      * @param t token a ser analisado
      * @return true se for primitivo e falso caso contrário
      */
-    public boolean isType(Token t) {
+    private boolean isType(Token t) {
         return (t.getLexema().equals("int") || t.getLexema().equals("real") || t.getLexema().equals("boolean") || t.getLexema().equals("string")) ? true : false;
 
     }
 //********************** INICIO DOS PROCEDIMENTOS ***************************************
 
-    public void start() throws IOException {
+    private void start() throws IOException {
 
         globalValues();       
         functionsProcedures();
@@ -153,7 +148,7 @@ public class Parser {
 //********************** GLOBAL VALUES *****************************************************
 //                  DECLARAÇÃO DE VARIÁVEIS 
 
-    public void globalValues() throws IOException {
+    private void globalValues() throws IOException {
         if (token == null) {
             setErro(" var or const expected");
             return;
@@ -289,7 +284,7 @@ public class Parser {
     }
 
 //********** CONST VALUES DECLARATION **********************************************************************
-    public void constValuesDeclaration() throws IOException {
+    private void constValuesDeclaration() throws IOException {
         if (token == null) {
             setErro(" Type expected");
             return;
@@ -319,7 +314,7 @@ public class Parser {
     }
 //********** CONST VALUES ATRIBUITION *****************************************************************
 
-    public void constValuesAtribuition() throws IOException {
+    private void constValuesAtribuition() throws IOException {
         if (token == null) {
             setErro(" IDE expected");
             return;
@@ -342,7 +337,7 @@ public class Parser {
     }
 
 //********** VALUE CONST ******************************************************************************
-    public void valueConst() throws IOException {
+    private void valueConst() throws IOException {
         if (token == null) {
             setErro(" value expected");
         } else if (token.getTipo().equals("NRO")) {
@@ -358,7 +353,7 @@ public class Parser {
     }
 //********** CONST MORE ATRIBUITION ********************************************************************
 
-    public void constMoreAtribuition() throws IOException {
+    private void constMoreAtribuition() throws IOException {
         if (token == null) {
             setErro("; expected");
         } else if (token.getLexema().equals(",")) {
@@ -373,7 +368,7 @@ public class Parser {
     }
 //********** VAR VALUES DECLARATION *********************************************************************
 
-    public void varValuesDeclaration() throws IOException {
+    private void varValuesDeclaration() throws IOException {
         if (token == null) {
             setErro(" Type expected");
             return;
@@ -427,7 +422,7 @@ public class Parser {
     }
 
 //********** VAR VALUES ATRIBUITION *********************************************************************
-    public void varValuesAtribuition() throws IOException {
+    private void varValuesAtribuition() throws IOException {
         if (token == null) {
             setErro(" IDE expected");
         } else if (token.getTipo().equals("IDE")) {
@@ -440,7 +435,7 @@ public class Parser {
     }
 //********** VAR MORE ATRIBUITION ***********************************************************************
 
-    public void varMoreAtribuition() throws IOException {
+    private void varMoreAtribuition() throws IOException {
         if (token == null) {
             setErro(" ; expected");
         } else if (token.getLexema().equals(",")) {
@@ -459,7 +454,7 @@ public class Parser {
     }
 //********** VAR ARRAY VERIFICATION *********************************************************************     
 
-    public void arrayVerification() throws IOException {
+    private void arrayVerification() throws IOException {
         if (token == null) {
             setErro(" [ expected");
             return;
@@ -495,7 +490,7 @@ public class Parser {
     }
 //********** IDE STRUCT *********************************************************************************
 
-    public void ideStruct() throws IOException {
+    private void ideStruct() throws IOException {
         if (token == null) {
             setErro(" identifier expected");
         } else if (token.getTipo().equals("IDE")) {
@@ -508,7 +503,7 @@ public class Parser {
     }
 //********** IDE STRUCT 2 *******************************************************************************
 
-    public void ideStruct2() throws IOException {
+    private void ideStruct2() throws IOException {
         if (token == null) {
             setErro(" { or extends expected");
             return;
@@ -626,7 +621,7 @@ public class Parser {
     }
 
 //********** FUNCTIONS PROCEDURES ***********************************************************************
-    public void functionsProcedures() throws IOException {
+    private void functionsProcedures() throws IOException {
         if (token == null) {
             //setErro("function or procedures expected"); ACHO QUE AQUI TRATA O VAZIO
             return;
@@ -825,7 +820,7 @@ public class Parser {
     }
 //*************** PARAM LIST **********************************************************************
 
-    public void paramList() throws IOException {
+    private void paramList() throws IOException {
         if (token == null) {
             setErro("Type expected");
             return;
@@ -851,7 +846,7 @@ public class Parser {
     }
 //*************** MORE PARAM **********************************************************************
 
-    public void moreParam() throws IOException {
+    private void moreParam() throws IOException {
         if (token == null) {
             setErro(") expected");
             return;
@@ -867,7 +862,7 @@ public class Parser {
     }
 //*************** COMMANDS **********************************************************************
 
-    public void commands() throws IOException {
+    private void commands() throws IOException {
         if (token == null) {
             setErro("Commands expected");
             return;
@@ -892,7 +887,7 @@ public class Parser {
     }
 //*************** COMMANDS EXPRESSIONS  **********************************************************************
 
-    public void commandsExp() throws IOException {
+    private void commandsExp() throws IOException {
         if (token == null) {
             setErro("expression expected");
             return;
@@ -906,7 +901,7 @@ public class Parser {
     }
 //*************** RETURNS **********************************************************************
 
-    public void returns() throws IOException {
+    private void returns() throws IOException {
         if (token == null) {
             setErro("return expected");
             return;
@@ -938,7 +933,7 @@ public class Parser {
     }
 
 //*************** IF STATEMANT **********************************************************************
-    public void ifStatemant() throws IOException {
+    private void ifStatemant() throws IOException {
 
         if (token == null) {
             setErro("if expected");
@@ -1003,7 +998,7 @@ public class Parser {
     }
 //*************** ELSE STATEMANT ***********************************************************
 
-    public void elseStatemant() throws IOException {
+    private void elseStatemant() throws IOException {
 
         if (token == null) {
             setErro("else expected");
@@ -1041,7 +1036,7 @@ public class Parser {
     }
 //*************** WHILE STATEMANT ***********************************************************
 
-    public void whileStatemant() throws IOException {
+    private void whileStatemant() throws IOException {
         if (token == null) {
             setErro("while expected");
             return;
@@ -1092,7 +1087,7 @@ public class Parser {
     }
 //*************** READ STATEMANT **********************************************************************
 
-    public void readStatemant() throws IOException {
+    private void readStatemant() throws IOException {
         if (token == null) {
             setErro("read expected");
             return;
@@ -1138,12 +1133,12 @@ public class Parser {
 
     }
 
-    public void readParams() throws IOException {
+    private void readParams() throws IOException {
         callVariable();
         moreReadParams();
     }
 
-    public void moreReadParams() throws IOException {
+    private void moreReadParams() throws IOException {
         if (token == null) {
             setErro("more params or ) expected");
             return;
@@ -1160,7 +1155,7 @@ public class Parser {
     }
 
 //*************** PRINT STATEMANT **********************************************************
-    public void printStatemant() throws IOException {
+    private void printStatemant() throws IOException {
         if (token == null) {
             setErro("print expected");
             return;
@@ -1203,7 +1198,7 @@ public class Parser {
 
     }
 
-    public void printParams() throws IOException {
+    private void printParams() throws IOException {
         if (token == null) {
             setErro("print params expected");
             return;
@@ -1213,7 +1208,7 @@ public class Parser {
 
     }
 
-    public void printParam() throws IOException {
+    private void printParam() throws IOException {
         if (token == null) {
             setErro("print params expected");
             return;
@@ -1227,7 +1222,7 @@ public class Parser {
         }
     }
 
-    public void morePrintParams() throws IOException {
+    private void morePrintParams() throws IOException {
         if (token == null) {
             setErro(" more print params or ) expected");
             return;
@@ -1243,7 +1238,7 @@ public class Parser {
     }
 //*************** ASSIGNMENT **********************************************************************
 
-    public void assignment() throws IOException {
+    private void assignment() throws IOException {
         if (token == null) {
             setErro("expression expected");
             return;
@@ -1291,7 +1286,7 @@ public class Parser {
 
     }
 
-    public void assign2() throws IOException {
+    private void assign2() throws IOException {
         if (token == null) {
             setErro("expression expected");
             return;
@@ -1312,7 +1307,7 @@ public class Parser {
     }
 
 //*************** EXPRESSION **********************************************************************
-    public void expression() throws IOException {
+    private void expression() throws IOException {
         if (token == null) {
             setErro("expression expected");
             return;
@@ -1323,7 +1318,7 @@ public class Parser {
     }
 
 //*************** RELATIONAL EXPRESSION ***********************************************************    
-    public void relationalExp() throws IOException {
+    private void relationalExp() throws IOException {
         if (token == null) {
             setErro("expected");
             return;
@@ -1347,7 +1342,7 @@ public class Parser {
     }
 
 //*************** OPT LOGICAL EXPRESSION ***********************************************************   
-    public void optLogicalExp() throws IOException {
+    private void optLogicalExp() throws IOException {
         if (token == null) {
             setErro("&& or || expected");
             return;
@@ -1363,7 +1358,7 @@ public class Parser {
     }
 
 //*************** LOGICAL EXPRESSION ***************************************************************     
-    public void logicalExp() throws IOException {
+    private void logicalExp() throws IOException {
         if (token == null) {
             setErro(" relational op expected");
             return;
@@ -1373,7 +1368,7 @@ public class Parser {
     }
 
 //*************** POSS REL EXPRESSION ***************************************************************
-    public void possRelExp() throws IOException {
+    private void possRelExp() throws IOException {
         if (token == null) {
             setErro("!= == > < >= <= expected");
             return;
@@ -1396,7 +1391,7 @@ public class Parser {
     }
 
 //*************** EQUALITY EXPRESSION ***************************************************************
-    public void equalityExp() throws IOException {
+    private void equalityExp() throws IOException {
         if (token == null) {
             setErro("> < >= <= expected");
             return;
@@ -1415,7 +1410,7 @@ public class Parser {
     }
 
 //*************** INEQUALITY EXPRESSION ***************************************************************
-    public void inequalityExp() throws IOException {
+    private void inequalityExp() throws IOException {
         if (token == null) {
             setErro("> < >= <= expected");
             return;
@@ -1435,7 +1430,7 @@ public class Parser {
     }
 
 //*************** ARITIMETIC EXPRESSION ***************************************************************
-    public void aritmeticExp() throws IOException {
+    private void aritmeticExp() throws IOException {
         if (token == null) {
             setErro("Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
             return;
@@ -1460,7 +1455,7 @@ public class Parser {
     }
 
 //*************** OPERATION ***************************************************************************
-    public void operation() throws IOException {
+    private void operation() throws IOException {
         if (token == null) {
             setErro("Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
             return;
@@ -1470,7 +1465,7 @@ public class Parser {
     }
 
 //*************** OP SUM  *****************************************************************************
-    public void opSum() throws IOException {
+    private void opSum() throws IOException {
         if (token == null) {
             setErro("+ or - expected");
             return;
@@ -1493,7 +1488,7 @@ public class Parser {
     }
 
 //*************** OP MULTIPLICATION *******************************************************************
-    public void opMultiplication() throws IOException {
+    private void opMultiplication() throws IOException {
         if (token == null) {
             setErro("/ or * expected");
             return;
@@ -1514,7 +1509,7 @@ public class Parser {
     }
 
 //*************** OP UNARY ***************************************************************************
-    public void opUnary() throws IOException {
+    private void opUnary() throws IOException {
         if (token == null) {
             setErro("Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
             return;
@@ -1551,7 +1546,7 @@ public class Parser {
     }
 
 //*************** UNARY OP ***************************************************************************
-    public void unaryOp() throws IOException {
+    private void unaryOp() throws IOException {
         if (token == null) {
             setErro("Unary OP, num, booleans, modifiers or identifiers expected");
             return;
@@ -1579,7 +1574,7 @@ public class Parser {
     }
 
 //*************** FINAL VALUE ************************************************************************
-    public void finalValue() throws IOException {
+    private void finalValue() throws IOException {
         if (token == null) {
             setErro("expected");
             return;
@@ -1595,7 +1590,7 @@ public class Parser {
     }
 
 //*************** CALL VARIABLE **********************************************************************
-    public void callVariable() throws IOException {
+    private void callVariable() throws IOException {
         if (token == null) {
             setErro("Identifier or Modifiers expected");
         }
@@ -1607,7 +1602,7 @@ public class Parser {
     }
 //*************** MODIFIER ***************************************************************************
 
-    public void modifier() throws IOException {
+    private void modifier() throws IOException {
         if (token.getLexema().equals("global") || token.getLexema().equals("local")) {
             token = proximoToken();
             if (token == null) {
@@ -1627,7 +1622,7 @@ public class Parser {
         }
     }
 
-    public void paths() throws IOException {
+    private void paths() throws IOException {
         if (token == null) {
             setErro("expected ");
             return;
@@ -1645,7 +1640,7 @@ public class Parser {
 
     }
 
-    public void struct() throws IOException {
+    private void struct() throws IOException {
         if (token == null) {
             setErro("");
             return;
@@ -1668,7 +1663,7 @@ public class Parser {
         }
     }
 
-    public void matrAssign() throws IOException {
+    private void matrAssign() throws IOException {
         if (token == null) {
             setErro("[ expected");
             return;
@@ -1703,7 +1698,7 @@ public class Parser {
     }
 //************** CALL FUNCTIONS PROCEDURES ***************************************************
 
-    public void callProcedureFunction() throws IOException {
+    private void callProcedureFunction() throws IOException {
         if (token == null) {
             setErro("identifier expected");
             return;
@@ -1735,7 +1730,7 @@ public class Parser {
         }
     }
 
-    public void realParamList() throws IOException {
+    private void realParamList() throws IOException {
         if (token == null) {
             setErro("values param or modifiers expected");
             return;
@@ -1753,7 +1748,7 @@ public class Parser {
         }
     }
 
-    public void realParam() throws IOException {
+    private void realParam() throws IOException {
         if (token == null) {
             setErro("( expected");
             return;
@@ -1768,7 +1763,7 @@ public class Parser {
         }
     }
 
-    public void moreRealParam() throws IOException {
+    private void moreRealParam() throws IOException {
         if (token == null) {
             setErro(") expected");
             return;
@@ -1791,7 +1786,7 @@ public class Parser {
         }
     }
 
-    public void valueParam() throws IOException {
+    private void valueParam() throws IOException {
         if (token == null) {
             setErro(") or params expected");
             return;
