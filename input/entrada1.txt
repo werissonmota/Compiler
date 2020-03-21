@@ -1,24 +1,26 @@
-const { int biruley = 3;
+const { int biruley = 3, daaa = 5, dww = 9;
 	boolean s = true;
 	string dd = "dsds";
 	real pi = 3.14;
 }
-var { int birulau, deas;
+var { int birulau, concrete;
       string s;
       boolean aux;
       real x;
       int array[2], array1[3];
       int matriz[2][2], matriz2[2][3]; 
       typedef struct dd extends hb20{ var { int j;} }
-      struct dd { var { int j;} }
+      struct dd1 { var { int j;} }
       typedef struct xandAviao extends cleitonRasta{
       var { boolean dsa;} } 
 }
+
+
 procedure start(){
        var { int j;}
 	   read(a);
 	   print(a);
-			i = 5;
+	   i = 5;
 	   
 	   
 	   
@@ -36,7 +38,10 @@ procedure start(){
 }
 
 function int sss(){
-       var { int j;}
+       var { int ggg;
+	     struct xx{
+              var {int testaEscopo;}
+	     }
 	   read(a);
 	   print(a);
 	   i = 5;

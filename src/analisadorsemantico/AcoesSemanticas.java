@@ -1,17 +1,17 @@
-package analisadorsintatico;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package analisadorsemantico;
 
 import analisadorlexico.Token;
-import analisadorsemantico.FuncProcTemporaria;
-import analisadorsemantico.Param;
-import analisadorsemantico.VarTemporaria;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.HashMap;
-import java.util.Iterator;
 import java.util.Map;
 import java.util.Stack;
 
@@ -19,59 +19,27 @@ import java.util.Stack;
  *
  * @author Aurelio
  */
-public class Parser {
-   // Coisas utilizadas para a análise sintática 
+public class AcoesSemanticas {
+    
     File arquivoSaida;
     ArrayList<Token> tokens;
     Stack<Token> pilhaTokens;
     String nomeArquivo;
     FileOutputStream fos;
-    Token token;
-
-  // Coisas utilizadas para o análise semântica    
+    Token token;    
     Map<String, Object> tabSimbolos;
-    ArrayList<VarTemporaria> varTemporarias;
-    ArrayList<VarTemporaria> constTemporarias;
-    ArrayList<FuncProcTemporaria> functionsTemporarias;
-    ArrayList<Param> paramsTemporarios;
-    VarTemporaria varTemp;
-    FuncProcTemporaria funcProcTemp;
-    Param paramTemp;
-    String typeVar;
-    Stack<String> escopo;
-    
 
-    public Parser(ArrayList<Token> a, int num) throws FileNotFoundException {        
+    public AcoesSemanticas(ArrayList<Token> a, int num) throws FileNotFoundException {        
         pilhaTokens = new <Token>Stack();
+        tabSimbolos = new <String,Object>HashMap();
         this.tokens = a;
         this.arquivoSaida = new File("output sintatico" + "/" + "saida" + num + ".txt");
         this.fos = new FileOutputStream(arquivoSaida);
-        
-        tabSimbolos = new <String,Object>HashMap();
-        varTemporarias = new <VarTemporaria>ArrayList();
-        constTemporarias = new <VarTemporaria>ArrayList();
-        functionsTemporarias = new <FuncProcTemporaria>ArrayList();
-        this.escopo = new <String>Stack();
-        this.escopo.push("global");
     }
-
-    public void run() throws IOException {
-        // passar array de tokens para a pilha   
-        Collections.reverse(tokens);
-        Iterator it = tokens.iterator();
-        while (it.hasNext()) {
-            Token t = (Token) it.next();
-            pilhaTokens.push((Token) t);
-        }
-        token = proximoToken();
-        start();
-        if (arquivoSaida.length() == 0) {
-            semErrosSintaticos();
-        }
-        fechaArquivos();
-    }
-
-    /**
+    
+    
+    
+        /**
      * Método que devolve o proximo token a ser verificado
      *
      * @return Token a ser verificado
@@ -127,6 +95,32 @@ public class Parser {
     }
 
     /**
+     * Método que utiliza o modo pânico para dar seguimento na varredura caso encontre um erro
+     * @param tokenSinc
+     */
+    private void erro(String tokenSinc[]) {
+        boolean verifica = false;
+        while(token != null){
+          for(String a: tokenSinc){
+            if(token == null){
+                break;
+            }else if(token.getLexema().equals(a) || token.getTipo().equals(a)){
+                verifica = true;
+                break;
+            }
+          }
+          if(token == null){
+              break;
+          }else if(verifica == true){
+            break;  
+          }else{
+              token = proximoToken();
+          }
+        }
+        
+    }
+
+    /**
      * Método que verfica se um token é um tipo primitivo
      *
      * @param t token a ser analisado
@@ -140,16 +134,8 @@ public class Parser {
 
     private void start() throws IOException {
 
-        globalValues();      
+        globalValues();       
         functionsProcedures();
-         Iterator it = varTemporarias.iterator();
-        while(it.hasNext()){
-            VarTemporaria vt = (VarTemporaria)it.next();
-            System.out.println(vt.getType()+"\n");
-            System.out.println(vt.getId()+"\n");
-            System.out.println(vt.getEscopo()+"\n");
-            System.out.println(vt.getDimensao()+"\n"+"\n");
-        } 
     }
 //********************** GLOBAL VALUES *****************************************************
 //                  DECLARAÇÃO DE VARIÁVEIS 
@@ -166,7 +152,10 @@ public class Parser {
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
-                varValuesDeclaration();               
+                varValuesDeclaration();
+                if (token == null) {
+                    return;
+                }
             } else {
                 setErro(token.getLinha(), "{ expected");
             }
@@ -194,7 +183,10 @@ public class Parser {
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
-                constValuesDeclaration();               
+                constValuesDeclaration();
+                if (token == null) {
+                    return;
+                }
             } else {
                 setErro(token.getLinha(), "{ expected");
             }
@@ -216,7 +208,10 @@ public class Parser {
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
-                constValuesDeclaration();              
+                constValuesDeclaration();
+                if (token == null) {
+                    return;
+                }
             } else {
                 setErro(token.getLinha(), "{ expected");
             }
@@ -244,7 +239,10 @@ public class Parser {
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
-                varValuesDeclaration();               
+                varValuesDeclaration();
+                if (token == null) {
+                    return;
+                }
             } else {
                 setErro(token.getLinha(), "} expected");
             }
@@ -272,10 +270,8 @@ public class Parser {
             setErro(" Type expected");
             return;
         } else if (isType(token)) {
-            typeVar = token.getLexema();
             token = proximoToken();
             constValuesAtribuition();
-            constTemporarias.add(varTemp);
             constMoreAtribuition();
 
             if (token == null) {
@@ -302,7 +298,6 @@ public class Parser {
             setErro(" IDE expected");
             return;
         } else if (token.getTipo().equals("IDE")) {
-            varTemp = new VarTemporaria(typeVar,token.getLexema(),escopo.peek());
             token = proximoToken();
         } else {
             setErro(token.getLinha(), "IDE expected");
@@ -323,13 +318,10 @@ public class Parser {
         if (token == null) {
             setErro(" value expected");
         } else if (token.getTipo().equals("NRO")) {
-            varTemp.setValue(token.getLexema(), token.getTipo());
             token = proximoToken();
         } else if (token.getTipo().equals("CDC")) {
-            varTemp.setValue(token.getLexema(), token.getTipo());
             token = proximoToken();
         } else if (token.getLexema().equals("true") || token.getLexema().equals("false")) {
-            varTemp.setValue(token.getLexema(), token.getTipo());
             token = proximoToken();
         } else {
             setErro(token.getLinha(), "value const expected");
@@ -343,8 +335,6 @@ public class Parser {
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
             constValuesAtribuition();
-            constTemporarias.add(varTemp);
-            constMoreAtribuition();
         } else if (token.getLexema().equals(";")) {
             //vazio
         } else {
@@ -358,10 +348,8 @@ public class Parser {
             setErro(" Type expected");
             return;
         } else if (isType(token)) {
-            typeVar = token.getLexema();           
             token = proximoToken();
-            varValuesAtribuition();
-            varTemporarias.add(varTemp);
+            varValuesAtribuition();            
             varMoreAtribuition();          
 
             if (token == null) {
@@ -379,9 +367,11 @@ public class Parser {
                 setErro(" identifier expected");
                 return;
             } else if (token.getLexema().equals("struct")) {
-                typeVar = token.getLexema();
                 token = proximoToken();
-                ideStruct();               
+                ideStruct();
+                if (token == null) {
+                    return;
+                }
                 varValuesDeclaration();
 
             } else {
@@ -389,9 +379,11 @@ public class Parser {
             }
 
         } else if (token.getLexema().equals("struct")) {
-            typeVar = token.getLexema();
             token = proximoToken();
-            ideStruct();            
+            ideStruct();
+            if (token == null) {
+                return;
+            }
             varValuesDeclaration();
         } else if (token.getLexema().equals("}")) {
             // vazio  
@@ -407,11 +399,11 @@ public class Parser {
         if (token == null) {
             setErro(" IDE expected");
         } else if (token.getTipo().equals("IDE")) {
-            varTemp = new VarTemporaria(typeVar,token.getLexema(),escopo.peek());
             token = proximoToken();           
             arrayVerification();
         } else {
-            setErro(token.getLinha(), " IDE expected");            
+            setErro(token.getLinha(), " IDE expected");
+            
         }
     }
 //********** VAR MORE ATRIBUITION ***********************************************************************
@@ -422,7 +414,9 @@ public class Parser {
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
             varValuesAtribuition();
-            varTemporarias.add(varTemp);
+            if (token == null) {
+                return;
+            }
             varMoreAtribuition();
         } else if (token.getLexema().equals(";")) {
             // vazio           
@@ -436,13 +430,13 @@ public class Parser {
         if (token == null) {
             setErro(" [ expected");
             return;
-        } else if (token.getLexema().equals("[")) {            
+        } else if (token.getLexema().equals("[")) {
             token = proximoToken();
+
             if (token == null) {
                 setErro(" number expected");
                 return;
             } else if (token.getTipo().equals("NRO")) {
-                varTemp.setDimensao(token.getLexema());
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "number expected");
@@ -468,12 +462,9 @@ public class Parser {
     private void ideStruct() throws IOException {
         if (token == null) {
             setErro(" identifier expected");
-        } else if (token.getTipo().equals("IDE")) {            
-            varTemp = new VarTemporaria(typeVar,token.getLexema(),escopo.peek());
-            escopo.push(token.getLexema());
+        } else if (token.getTipo().equals("IDE")) {
             token = proximoToken();
             ideStruct2();
-            escopo.pop();
         } else {
             setErro(token.getLinha(), " IDE expected");
         }
@@ -485,7 +476,6 @@ public class Parser {
             setErro(" { or extends expected");
             return;
         } else if (token.getLexema().equals("{")) {
-            varTemporarias.add(varTemp);
             token = proximoToken();
 
             if (token == null) {
@@ -502,7 +492,10 @@ public class Parser {
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
-                varValuesDeclaration();                
+                varValuesDeclaration();
+                if (token == null) {
+                    return;
+                }
             } else {
                 setErro(token.getLinha(), "{ expected");
             }
@@ -530,8 +523,6 @@ public class Parser {
                 setErro(" IDE expected");
                 return;
             } else if (token.getTipo().equals("IDE")) {
-                varTemp.setParent(token.getLexema());
-                varTemporarias.add(varTemp);
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), " IDE expected");
@@ -597,36 +588,33 @@ public class Parser {
             if (token == null) {
                 setErro("Type expected");
                 return;
-            } else if (isType(token) || token.getTipo().equals("IDE")) {                
-                funcProcTemp = new FuncProcTemporaria(token.getLexema(),escopo.peek());
+            } else if (isType(token) || token.getTipo().equals("IDE")) {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "Type expected");
+                //erro("Type"); 
             }
-            
-            
             if (token == null) {
                 setErro("Identifier expected");
                 return;
             } else if (token.getTipo().equals("IDE")) {
-                escopo.push(token.getLexema());
-                funcProcTemp.setId(token.getLexema());
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "Identifier expected");               
+                setErro(token.getLinha(), "Identifier expected");
+                //erro("identifier");
             }
-            
-            
             if (token == null) {
                 setErro("( expected");
                 return;
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
-                paramsTemporarios = new <Param>ArrayList();
                 paramList();
-                funcProcTemp.setListParams(paramsTemporarios);
+                if (token == null) {
+                    return;
+                }
             } else {
                 setErro(token.getLinha(), "( expected");
+                //erro();
             }
 
             if (token == null) {
@@ -636,6 +624,7 @@ public class Parser {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), ") expected");
+                //erro();
             }
 
             if (token == null) {
@@ -645,6 +634,7 @@ public class Parser {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "{ expected");
+                //erro("function");
             }
 
             if (token == null) {
@@ -654,6 +644,7 @@ public class Parser {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "var expected");
+                //erro("function");
             }
 
             if (token == null) {
@@ -667,6 +658,7 @@ public class Parser {
                 }
             } else {
                 setErro(token.getLinha(), "{ expected");
+                //erro("function");
             }
 
             if (token == null) {
@@ -679,43 +671,40 @@ public class Parser {
                 
             } else {
                 setErro(token.getLinha(), "} expected");
+                // erro("function");
             }
 
             if (token == null) {
                 setErro("} expected");
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
-                escopo.pop();
                 functionsProcedures();
-                
+
             } else {
                 setErro(token.getLinha(), "} expected");
+                // erro("function");
             }
         } else if (token.getLexema().equals("procedure")) {
             token = proximoToken();
             if (token == null) {
                 setErro("identifier expected");
                 return;
-            } else if (token.getTipo().equals("IDE") || token.getLexema().equals("start")) {                
-                funcProcTemp = new FuncProcTemporaria(token.getLexema(),escopo.peek());
-                escopo.push(token.getLexema());
-                funcProcTemp.setType(" ");
+            } else if (token.getTipo().equals("IDE") || token.getLexema().equals("start")) {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "identifier expected");
+                // erro("function");
             }
 
             if (token == null) {
                 setErro("( expected");
                 return;
             } else if (token.getLexema().equals("(")) {
-                token = proximoToken();                
-                paramsTemporarios = new <Param>ArrayList();
+                token = proximoToken();
                 paramList();
-                funcProcTemp.setListParams(paramsTemporarios);               
-                
             } else {
                 setErro(token.getLinha(), ") expected");
+                // erro("function");
             }
 
             if (token == null) {
@@ -725,6 +714,7 @@ public class Parser {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), ") expected");
+                //erro();
             }
 
             if (token == null) {
@@ -734,6 +724,7 @@ public class Parser {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "{ expected");
+                //erro("function");
             }
 
             if (token == null) {
@@ -743,6 +734,7 @@ public class Parser {
                 token = proximoToken();
             } else {
                 setErro(token.getLinha(), "var expected");
+                //erro("function");
             }
 
             if (token == null) {
@@ -750,9 +742,13 @@ public class Parser {
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
-                varValuesDeclaration();               
+                varValuesDeclaration();
+                if (token == null) {
+                    return;
+                }
             } else {
                 setErro(token.getLinha(), "{ expected");
+                //erro("function");
             }
 
             if (token == null) {
@@ -763,21 +759,22 @@ public class Parser {
                 commands();
             } else {
                 setErro(token.getLinha(), "} expected");
+                // erro("function");
             }
 
             if (token == null) {
                 setErro("} expected");
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
-                escopo.pop();
                 functionsProcedures();
             } else {
                 setErro(token.getLinha(), "} expected");
+                // erro("function");
             }
         } else {
             setErro(token.getLinha(), "function or procedure expected");
+            //erro("");
         }
-   
     }
 //*************** PARAM LIST **********************************************************************
 
@@ -785,26 +782,23 @@ public class Parser {
         if (token == null) {
             setErro("Type expected");
             return;
-        } else if (isType(token) || token.getTipo().equals("IDE")) {
-            paramTemp = new Param(token.getLexema());
-            token = proximoToken();  
-            
-            
+        } else if (isType(token)) {
+            token = proximoToken();
             if (token == null) {
                 setErro("IDE expected");
                 return;
             } else if (token.getTipo().equals("IDE")) {
-                paramTemp.setId(token.getLexema());
                 token = proximoToken();
-                paramsTemporarios.add(paramTemp);
                 moreParam();
             } else {
                 setErro(token.getLinha(), "Identifier expected");
+                //erro(",");   
             }
         } else if (token.getLexema().equals(")")) {
             // vazio
         } else {
             setErro(token.getLinha(), "Type expected");
+            //erro("Identifier");
         }
 
     }
@@ -821,6 +815,7 @@ public class Parser {
             // vazio
         } else {
             setErro(token.getLinha(), ") expected");
+            // erro("Type");
         }
     }
 //*************** COMMANDS **********************************************************************

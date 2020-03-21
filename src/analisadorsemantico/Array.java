@@ -10,5 +10,6 @@ package analisadorsemantico;
  * @author Aurelio
  */
 public class Array extends Var{
+  private int dimensao;
     
 }

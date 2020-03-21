@@ -1,1 +1,3 @@
-Sucess! No syntactic errors
+Line 45 syntactic error:  Type var expected
+Line 45 syntactic error: } expected
+Line 45 syntactic error: } expected

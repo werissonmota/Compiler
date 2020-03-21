@@ -4,13 +4,13 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsintatico/Parser.java</file>
-            <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/Procedure.java</file>
-            <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/Function.java</file>
-            <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/AnalisadorSemantico.java</file>
+            <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/Array.java</file>
             <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsintatico/AnalisadorSintatico.java</file>
             <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/Composta.java</file>
+            <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/Param.java</file>
             <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/Var.java</file>
-            <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/RegrasSematicas.java</file>
+            <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/VarTemporaria.java</file>
+            <file>file:/C:/Users/Aurelio/Documents/Aurélio%20Academico/9%20semestre/PBL%20Compiladores/Compiler/Compiler/src/analisadorsemantico/FuncProcTemporaria.java</file>
         </group>
     </open-files>
 </project-private>
