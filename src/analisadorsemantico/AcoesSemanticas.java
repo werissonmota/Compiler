@@ -11,8 +11,9 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
-import java.util.Map;
+import java.util.Iterator;
 import java.util.Stack;
 
 /**
@@ -27,19 +28,40 @@ public class AcoesSemanticas {
     String nomeArquivo;
     FileOutputStream fos;
     Token token;    
-    Map<String, Object> tabSimbolos;
+    HashMap<String, Object> tabSimbolos;
+    Stack<String> escopo;
+    
 
-    public AcoesSemanticas(ArrayList<Token> a, int num) throws FileNotFoundException {        
+    public AcoesSemanticas(ArrayList<Token> arrayDeTokens, int num, HashMap <String,Object>tabSimbolos) throws FileNotFoundException {        
         pilhaTokens = new <Token>Stack();
-        tabSimbolos = new <String,Object>HashMap();
-        this.tokens = a;
-        this.arquivoSaida = new File("output sintatico" + "/" + "saida" + num + ".txt");
+        this.tabSimbolos = tabSimbolos;
+        this.tokens = arrayDeTokens;
+        this.arquivoSaida = new File("output semantico" + "/" + "saida" + num + ".txt");
         this.fos = new FileOutputStream(arquivoSaida);
+        this.escopo = new <String>Stack();
+        this.escopo.push("global");
     }
     
     
     
-        /**
+    public void run() throws IOException {
+        // passar array de tokens para a pilha   
+        Collections.reverse(tokens);
+        Iterator it = tokens.iterator();
+        while (it.hasNext()) {
+            Token t = (Token) it.next();
+            pilhaTokens.push((Token) t);
+        }
+        token = proximoToken();
+        start();
+        if (arquivoSaida.length() == 0) {
+            semErrosSemanticos();
+        }
+        fechaArquivos();
+    }
+    
+    
+    /**
      * Método que devolve o proximo token a ser verificado
      *
      * @return Token a ser verificado
@@ -49,12 +71,12 @@ public class AcoesSemanticas {
     }
 
     /**
-     * Método que escreve no arquivo caso não ocorra erros sintáticos
+     * Método que escreve no arquivo caso não ocorra erros semânticos
      *
      * @throws IOException
      */
-    private void semErrosSintaticos() throws IOException {
-        fos.write("Sucess! No syntactic errors".getBytes());
+    private void semErrosSemanticos() throws IOException {
+        fos.write("Sucess! No semantic errors".getBytes());
     }
 
     /**
@@ -77,7 +99,7 @@ public class AcoesSemanticas {
         fos.write("Line ".getBytes());
         fos.write(String.valueOf(linha).getBytes());
         fos.write(" ".getBytes());
-        fos.write("syntactic error: ".getBytes());
+        fos.write("semantic error: ".getBytes());
         fos.write(erro.getBytes());
         fos.write("\n".getBytes());
     }
@@ -89,35 +111,9 @@ public class AcoesSemanticas {
      * @throws IOException
      */
     private void setErro(String erro) throws IOException {
-        fos.write("Syntactic error $ end of chain: ".getBytes());
+        fos.write("Semantic error: ".getBytes());
         fos.write(erro.getBytes());
         fos.write("\n".getBytes());
-    }
-
-    /**
-     * Método que utiliza o modo pânico para dar seguimento na varredura caso encontre um erro
-     * @param tokenSinc
-     */
-    private void erro(String tokenSinc[]) {
-        boolean verifica = false;
-        while(token != null){
-          for(String a: tokenSinc){
-            if(token == null){
-                break;
-            }else if(token.getLexema().equals(a) || token.getTipo().equals(a)){
-                verifica = true;
-                break;
-            }
-          }
-          if(token == null){
-              break;
-          }else if(verifica == true){
-            break;  
-          }else{
-              token = proximoToken();
-          }
-        }
-        
     }
 
     /**
@@ -130,12 +126,17 @@ public class AcoesSemanticas {
         return (t.getLexema().equals("int") || t.getLexema().equals("real") || t.getLexema().equals("boolean") || t.getLexema().equals("string")) ? true : false;
 
     }
+    
+    private boolean varExist(String id, String escopo){
+        tabSimbolos.get(escopo);
+        return true;
+    }
 //********************** INICIO DOS PROCEDIMENTOS ***************************************
 
     private void start() throws IOException {
 
         globalValues();       
-        functionsProcedures();
+        //functionsProcedures();
     }
 //********************** GLOBAL VALUES *****************************************************
 //                  DECLARAÇÃO DE VARIÁVEIS 
@@ -152,10 +153,7 @@ public class AcoesSemanticas {
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
-                varValuesDeclaration();
-                if (token == null) {
-                    return;
-                }
+                varValuesDeclaration();                
             } else {
                 setErro(token.getLinha(), "{ expected");
             }
@@ -399,6 +397,9 @@ public class AcoesSemanticas {
         if (token == null) {
             setErro(" IDE expected");
         } else if (token.getTipo().equals("IDE")) {
+            if(! varExist(token.getLexema(), escopo.peek())){
+               setErro("Var "+token.getLexema()+"has already been declared in the scope: "+escopo.peek()); 
+            }
             token = proximoToken();           
             arrayVerification();
         } else {

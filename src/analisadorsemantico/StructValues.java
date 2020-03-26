@@ -5,12 +5,10 @@
  */
 package analisadorsemantico;
 
-import java.util.Map;
-
 /**
  *
  * @author Aurelio
  */
-public class Function {
-  Map<String,Object> infoFunction;  
+public class StructValues {
+    
 }

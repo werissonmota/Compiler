@@ -15,8 +15,15 @@ public class Var {
     private String escopo;
     private String value;
     
-   public Var(){
-      
+    
+    
+    public Var(){
+        
+    }
+   public Var(String type, String id, String escopo){
+      this.id = id;
+      this.escopo = escopo;
+      this.type = type;
    }
 
     /**

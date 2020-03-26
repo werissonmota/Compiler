@@ -5,24 +5,23 @@
  */
 package analisadorsemantico;
 
-import java.util.ArrayList;
-
 /**
  *
  * @author Aurelio
  */
-public class FuncProcTemporaria {
+public class Const {
     private String id;
     private String type;
     private String escopo;
-    private ArrayList<Param> listParams;
-    private ArrayList<Object> listVars;
+    private String value;  
     
-    public FuncProcTemporaria(String type,String escopo){
+    public Const(String type, String id, String valor){
       this.type = type;
-      this.escopo = escopo;      
+      this.id = id;
+      this.value = valor;
+      this.escopo = "global";
+      
     }
-
     /**
      * @return the id
      */
@@ -66,34 +65,16 @@ public class FuncProcTemporaria {
     }
 
     /**
-     * @return the listParams
+     * @return the value
      */
-    public ArrayList<Param> getListParams() {
-        return listParams;
+    public String getValue() {
+        return value;
     }
 
     /**
-     * @param listParams the listParams to set
+     * @param value the value to set
      */
-    public void setListParams(ArrayList<Param> listParams) {
-        this.listParams = listParams;
-    }
-    
-    public int qtdParams(){
-        return listParams.size();
-    }
-
-    /**
-     * @return the listVars
-     */
-    public ArrayList<Object> getListVars() {
-        return listVars;
-    }
-
-    /**
-     * @param listVars the listVars to set
-     */
-    public void setListVars(ArrayList<Object> listVars) {
-        this.listVars = listVars;
+    public void setValue(String value) {
+        this.value = value;
     }
 }

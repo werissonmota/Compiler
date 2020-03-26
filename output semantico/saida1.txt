@@ -1,0 +1,1 @@
+Line 70 semantic error: var, const, function or procedures expected

@@ -37,11 +37,13 @@ procedure start(){
 	
 }
 
-function int sss(){
+function int sss(int t){
        var { int ggg;
 	     struct xx{
               var {int testaEscopo;}
 	     }
+		 
+	}
 	   read(a);
 	   print(a);
 	   i = 5;
@@ -59,6 +61,12 @@ function int sss(){
 		
 		}	
 	return 0;
+}
+
+function boolean function2(boolean x, int aux){
+var{ int tameImpala;}
+
+return true;
 }
 
 

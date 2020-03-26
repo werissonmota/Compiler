@@ -11,36 +11,24 @@ import java.util.ArrayList;
  *
  * @author Aurelio
  */
-public class VarTemporaria {
+public class FunctionProcedure {
     private String id;
     private String type;
     private String escopo;
-    private String value,typeValue;
-    private String parent;
-    private ArrayList<Object> listVars;
-    private ArrayList dimensao;
+    private ArrayList<Param> listParams;
+    private ArrayList<Object> listVars; 
     
-    public VarTemporaria(String type, String id, String escopo){
-        this.type = type;
-        this.id = id;
-        this.dimensao = new ArrayList();
-        this.escopo = escopo;
-        this.parent = " ";
+    public FunctionProcedure(){
+        
     }
     
-    public ArrayList getDimensoes(){
-        return dimensao;
+    public FunctionProcedure(String type, String id, ArrayList<Param> listParams,ArrayList<Object> listVars){
+     this.type = type;
+     this.id = id;
+     this.listParams = listParams;
+     this.listVars = listVars;
+     this.escopo = "global";
     }
-    public int getDimensao(){
-        return dimensao.size();
-    }
-    public void setDimensao(String value){
-        dimensao.add(value);
-    }
-    public boolean isArray(){
-        return dimensao.size() != 0;
-    }
-
     /**
      * @return the id
      */
@@ -84,33 +72,17 @@ public class VarTemporaria {
     }
 
     /**
-     * @return the value
+     * @return the listParams
      */
-    public String getValue() {
-        return value;
+    public ArrayList<Param> getListParams() {
+        return listParams;
     }
 
     /**
-     * @param value the value to set
-     * @param typeValue
+     * @param listParams the listParams to set
      */
-    public void setValue(String value, String typeValue) {
-        this.value = value;
-        this.typeValue = typeValue;
-    }
-
-    /**
-     * @return the parent
-     */
-    public String getParent() {
-        return parent;
-    }
-
-    /**
-     * @param parent the parent to set
-     */
-    public void setParent(String parent) {
-        this.parent = parent;
+    public void setListParams(ArrayList<Param> listParams) {
+        this.listParams = listParams;
     }
 
     /**
@@ -126,13 +98,4 @@ public class VarTemporaria {
     public void setListVars(ArrayList<Object> listVars) {
         this.listVars = listVars;
     }
-
-    /**
-     * @return the typeValue
-     */
-    public String getTypeValue() {
-        return typeValue;
-    }
-
-   
 }

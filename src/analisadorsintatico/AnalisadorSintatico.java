@@ -10,6 +10,7 @@ import analisadorlexico.Token;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 
 /**
@@ -18,9 +19,11 @@ import java.util.Iterator;
  */
 public class AnalisadorSintatico {
    
-    public void analiseSintatica() throws FileNotFoundException, IOException{
+    public ItensSemantico analiseSintatica() throws FileNotFoundException, IOException{        
+        ArrayList<HashMap<String,Object>> arraysDeTabelaDeSimbolos = new <HashMap<String,Object>> ArrayList();
+        HashMap<String,Object> tabSimbolos;
         AnalisadorLexico analisadorlexico = new AnalisadorLexico();
-        ArrayList<ArrayList> arrayDeArrays = new <ArrayList>ArrayList();
+        ArrayList<ArrayList<Token>> arrayDeArrays = new <ArrayList<Token>>ArrayList();
         ArrayList<Token> arrayDeTokens;
         arrayDeArrays = analisadorlexico.analiseLexica();        
         Parser parser;        
@@ -30,13 +33,11 @@ public class AnalisadorSintatico {
             arrayDeTokens = new <Token> ArrayList();
             arrayDeTokens = (ArrayList<Token>) it.next();            
             parser = new Parser(arrayDeTokens, cont);
-            parser.run();
+            tabSimbolos = parser.run();
+            arraysDeTabelaDeSimbolos.add(tabSimbolos);
             cont ++;
         }
-        
+        return new ItensSemantico(arraysDeTabelaDeSimbolos, arrayDeArrays);
 }
-    public static void main(String[] args) throws FileNotFoundException, IOException {        
-        AnalisadorSintatico analisadorSintatico = new AnalisadorSintatico();
-        analisadorSintatico.analiseSintatica();       
-    }
+    
 }

@@ -5,7 +5,8 @@
  */
 package analisadorsemantico;
 
-import java.util.LinkedList;
+import java.util.ArrayList;
+
 
 /**
  *
@@ -13,7 +14,15 @@ import java.util.LinkedList;
  */
 public class Composta extends Var{
     private String parent;
-    private LinkedList<Object> listVars;
+    private ArrayList<Object> listVars;
+    
+    public Composta(String type, String id, String escopo,String parent,ArrayList listVars){
+      super.setType(type);
+      super.setId(id);
+      super.setEscopo(escopo);
+      this.parent = parent;
+      this.listVars = listVars;
+    }
 
     /**
      * @return the parent
@@ -32,14 +41,14 @@ public class Composta extends Var{
     /**
      * @return the listVars
      */
-    public LinkedList<Object> getListVars() {
+    public ArrayList<Object> getListVars() {
         return listVars;
     }
 
     /**
      * @param listVars the listVars to set
      */
-    public void setListVars(LinkedList<Object> listVars) {
+    public void setListVars(ArrayList<Object> listVars) {
         this.listVars = listVars;
     }
 }
