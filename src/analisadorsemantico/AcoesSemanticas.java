@@ -136,122 +136,113 @@ public class AcoesSemanticas {
     private void start() throws IOException {
 
         globalValues();       
-        //functionsProcedures();
+        functionsProcedures();
     }
 //********************** GLOBAL VALUES *****************************************************
 //                  DECLARAÇÃO DE VARIÁVEIS 
 
     private void globalValues() throws IOException {
         if (token == null) {
-            setErro(" var or const expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("var")) {
             token = proximoToken();
             
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 varValuesDeclaration();                
             } else {
-                setErro(token.getLinha(), "{ expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("const expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("const")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "const expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" { expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 constValuesDeclaration();
-                if (token == null) {
-                    return;
-                }
             } else {
-                setErro(token.getLinha(), "{ expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
 
         } else if (token.getLexema().equals("const")) {
             token = proximoToken();
 
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 constValuesDeclaration();
-                if (token == null) {
-                    return;
-                }
             } else {
-                setErro(token.getLinha(), "{ expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("var expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("var")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "var expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" { expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 varValuesDeclaration();
-                if (token == null) {
-                    return;
-                }
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
 
         } else if (token.getLexema().equals("function") || token.getLexema().equals("procedures")) {
@@ -265,7 +256,7 @@ public class AcoesSemanticas {
 //********** CONST VALUES DECLARATION **********************************************************************
     private void constValuesDeclaration() throws IOException {
         if (token == null) {
-            setErro(" Type expected");
+            //erro sintatico
             return;
         } else if (isType(token)) {
             token = proximoToken();
@@ -273,19 +264,19 @@ public class AcoesSemanticas {
             constMoreAtribuition();
 
             if (token == null) {
-                setErro(" ; expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(";")) {
                 token = proximoToken();
                 constValuesDeclaration();
 
             } else {
-                setErro(token.getLinha(), " ; expected");
+                //erro sintatico
             }
         } else if (token.getLexema().equals("}")) {
             //vazio
         } else {
-            setErro(token.getLinha(), " Type expected");
+            //erro sintatico
         }
 
     }
@@ -293,28 +284,28 @@ public class AcoesSemanticas {
 
     private void constValuesAtribuition() throws IOException {
         if (token == null) {
-            setErro(" IDE expected");
+            //erro sintatico
             return;
         } else if (token.getTipo().equals("IDE")) {
             token = proximoToken();
         } else {
-            setErro(token.getLinha(), "IDE expected");
+            //erro sintatico
         }
         
         if (token == null) {
-            setErro(" = expected");
+            //erro sintatico
         } else if (token.getLexema().equals("=")) {
             token = proximoToken();
             valueConst();
         } else {
-            setErro(token.getLinha(), " = expected");
+           //erro sintatico
         }
     }
 
 //********** VALUE CONST ******************************************************************************
     private void valueConst() throws IOException {
         if (token == null) {
-            setErro(" value expected");
+           //erro sintatico
         } else if (token.getTipo().equals("NRO")) {
             token = proximoToken();
         } else if (token.getTipo().equals("CDC")) {
@@ -322,28 +313,28 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals("true") || token.getLexema().equals("false")) {
             token = proximoToken();
         } else {
-            setErro(token.getLinha(), "value const expected");
+            //erro sintatico
         }
     }
 //********** CONST MORE ATRIBUITION ********************************************************************
 
     private void constMoreAtribuition() throws IOException {
         if (token == null) {
-            setErro("; expected");
+          //erro sintatico
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
             constValuesAtribuition();
         } else if (token.getLexema().equals(";")) {
             //vazio
         } else {
-            setErro(token.getLinha(), " ; expected");
+            //erro sintatico
         }
     }
 //********** VAR VALUES DECLARATION *********************************************************************
 
     private void varValuesDeclaration() throws IOException {
         if (token == null) {
-            setErro(" Type expected");
+            //erro sintatico
             return;
         } else if (isType(token)) {
             token = proximoToken();
@@ -351,42 +342,35 @@ public class AcoesSemanticas {
             varMoreAtribuition();          
 
             if (token == null) {
-                setErro(" ; expected");
+                //erro sintatico
             } else if (token.getLexema().equals(";")) {
                 token = proximoToken();
                 varValuesDeclaration();
 
             } else {
-                setErro(token.getLinha(), " ; expected");
+                //erro sintatico
             }
         } else if (token.getLexema().equals("typedef")) {
             token = proximoToken();
             if (token == null) {
-                setErro(" identifier expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("struct")) {
                 token = proximoToken();
                 ideStruct();
-                if (token == null) {
-                    return;
-                }
                 varValuesDeclaration();
-
             } else {
-                setErro(token.getLinha(), " struct expected");
+                //erro sintatico
             }
 
         } else if (token.getLexema().equals("struct")) {
             token = proximoToken();
-            ideStruct();
-            if (token == null) {
-                return;
-            }
+            ideStruct();        
             varValuesDeclaration();
         } else if (token.getLexema().equals("}")) {
             // vazio  
         } else {
-            setErro(token.getLinha(), " Type var expected");
+            //erro sintatico
   
         }
 
@@ -395,66 +379,62 @@ public class AcoesSemanticas {
 //********** VAR VALUES ATRIBUITION *********************************************************************
     private void varValuesAtribuition() throws IOException {
         if (token == null) {
-            setErro(" IDE expected");
+            //erro sintatico
         } else if (token.getTipo().equals("IDE")) {
             if(! varExist(token.getLexema(), escopo.peek())){
-               setErro("Var "+token.getLexema()+"has already been declared in the scope: "+escopo.peek()); 
+               setErro(token.getLinha(),"Var "+token.getLexema()+"has already been declared in the scope: "+escopo.peek()); 
             }
             token = proximoToken();           
             arrayVerification();
         } else {
-            setErro(token.getLinha(), " IDE expected");
-            
+            //erro sintatico            
         }
     }
 //********** VAR MORE ATRIBUITION ***********************************************************************
 
     private void varMoreAtribuition() throws IOException {
         if (token == null) {
-            setErro(" ; expected");
+            //erro sintatico
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
             varValuesAtribuition();
-            if (token == null) {
-                return;
-            }
             varMoreAtribuition();
         } else if (token.getLexema().equals(";")) {
             // vazio           
         } else {
-            setErro(token.getLinha(), "; expected");
+            //erro sintatico
         }
     }
 //********** VAR ARRAY VERIFICATION *********************************************************************     
 
     private void arrayVerification() throws IOException {
         if (token == null) {
-            setErro(" [ expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("[")) {
             token = proximoToken();
 
             if (token == null) {
-                setErro(" number expected");
+                //erro sintatico
                 return;
             } else if (token.getTipo().equals("NRO")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "number expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" ] expected");
+                //erro sintatico
             } else if (token.getLexema().equals("]")) {
                 token = proximoToken();
                 arrayVerification();
             } else {
-                setErro(token.getLinha(), " ] expected");
+                //erro sintatico
             }
         } else if (token.getLexema().equals(",") || token.getLexema().equals(";")) {
             // vazio
         } else {
-            setErro(token.getLinha(), "[ expected");
+            //erro sintatico
         }
 
     }
@@ -462,119 +442,113 @@ public class AcoesSemanticas {
 
     private void ideStruct() throws IOException {
         if (token == null) {
-            setErro(" identifier expected");
+            //erro sintatico
         } else if (token.getTipo().equals("IDE")) {
             token = proximoToken();
             ideStruct2();
         } else {
-            setErro(token.getLinha(), " IDE expected");
+            //erro sintatico
         }
     }
 //********** IDE STRUCT 2 *******************************************************************************
 
     private void ideStruct2() throws IOException {
         if (token == null) {
-            setErro(" { or extends expected");
+           //erro sintatico
             return;
         } else if (token.getLexema().equals("{")) {
             token = proximoToken();
 
             if (token == null) {
-                setErro(" var expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("var")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), " var expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" { expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 varValuesDeclaration();
-                if (token == null) {
-                    return;
-                }
             } else {
-                setErro(token.getLinha(), "{ expected");
+               //erro sintatico
             }
 
             if (token == null) {
-                setErro(" } expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" } expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
         } else if (token.getLexema().equals("extends")) {
             token = proximoToken();
             if (token == null) {
-                setErro(" IDE expected");
+                //erro sintatico
                 return;
             } else if (token.getTipo().equals("IDE")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), " IDE expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" { expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "{ expected");
+                //erro sintatico
             }
             if (token == null) {
-                setErro(" var expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("var")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "var expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" { expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 varValuesDeclaration();
-                if (token == null) {
-                    return;
-                }
             } else {
-                setErro(token.getLinha(), "{ expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" } expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(" } expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
+                //erro sintatico
             }
         }
     }
@@ -582,88 +556,75 @@ public class AcoesSemanticas {
 //********** FUNCTIONS PROCEDURES ***********************************************************************
     private void functionsProcedures() throws IOException {
         if (token == null) {
-            //setErro("function or procedures expected"); ACHO QUE AQUI TRATA O VAZIO
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("function")) {
             token = proximoToken();
             if (token == null) {
-                setErro("Type expected");
+                //erro sintatico
                 return;
             } else if (isType(token) || token.getTipo().equals("IDE")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "Type expected");
-                //erro("Type"); 
+                //erro sintatico
             }
             if (token == null) {
-                setErro("Identifier expected");
+                //erro sintatico
                 return;
             } else if (token.getTipo().equals("IDE")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "Identifier expected");
-                //erro("identifier");
+                //erro sintatico
             }
             if (token == null) {
-                setErro("( expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
                 paramList();
-                if (token == null) {
-                    return;
-                }
             } else {
-                setErro(token.getLinha(), "( expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(") expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), ") expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "{ expected");
-                //erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("var expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("var")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "var expected");
-                //erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 varValuesDeclaration();
-                if (token == null) {
-                    return;
-                }
             } else {
-                setErro(token.getLinha(), "{ expected");
-                //erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
@@ -671,135 +632,119 @@ public class AcoesSemanticas {
                 returns();
                 
             } else {
-                setErro(token.getLinha(), "} expected");
-                // erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
                 functionsProcedures();
 
             } else {
-                setErro(token.getLinha(), "} expected");
-                // erro("function");
+                //erro sintatico
             }
         } else if (token.getLexema().equals("procedure")) {
             token = proximoToken();
             if (token == null) {
-                setErro("identifier expected");
+                //erro sintatico
                 return;
             } else if (token.getTipo().equals("IDE") || token.getLexema().equals("start")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "identifier expected");
-                // erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("( expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
                 paramList();
             } else {
-                setErro(token.getLinha(), ") expected");
-                // erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(") expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), ") expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "{ expected");
-                //erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("var expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("var")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "var expected");
-                //erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 varValuesDeclaration();
-                if (token == null) {
-                    return;
-                }
             } else {
-                setErro(token.getLinha(), "{ expected");
-                //erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
                 commands();
             } else {
-                setErro(token.getLinha(), "} expected");
-                // erro("function");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
                 functionsProcedures();
             } else {
-                setErro(token.getLinha(), "} expected");
-                // erro("function");
+                //erro sintatico
             }
         } else {
-            setErro(token.getLinha(), "function or procedure expected");
-            //erro("");
+            //erro sintatico
         }
     }
 //*************** PARAM LIST **********************************************************************
 
     private void paramList() throws IOException {
         if (token == null) {
-            setErro("Type expected");
+            //erro sintatico
             return;
         } else if (isType(token)) {
             token = proximoToken();
             if (token == null) {
-                setErro("IDE expected");
+                //erro sintatico
                 return;
             } else if (token.getTipo().equals("IDE")) {
                 token = proximoToken();
                 moreParam();
             } else {
-                setErro(token.getLinha(), "Identifier expected");
-                //erro(",");   
+                //erro sintatico   
             }
         } else if (token.getLexema().equals(")")) {
             // vazio
         } else {
-            setErro(token.getLinha(), "Type expected");
-            //erro("Identifier");
+            //erro sintatico
         }
 
     }
@@ -807,7 +752,7 @@ public class AcoesSemanticas {
 
     private void moreParam() throws IOException {
         if (token == null) {
-            setErro(") expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
@@ -815,8 +760,7 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals(")")) {
             // vazio
         } else {
-            setErro(token.getLinha(), ") expected");
-            // erro("Type");
+            //erro sintatico
         }
     }
 //*************** COMMANDS **********************************************************************
@@ -848,13 +792,10 @@ public class AcoesSemanticas {
 
     private void commandsExp() throws IOException {
         if (token == null) {
-            setErro("expression expected");
+            //erro sintatico
             return;
         } else {
-            relationalExp();
-            if (token == null) {
-                return;
-            }
+            relationalExp();          
             optLogicalExp();
         }
     }
@@ -862,12 +803,12 @@ public class AcoesSemanticas {
 
     private void returns() throws IOException {
         if (token == null) {
-            setErro("return expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("return")) {
             token = proximoToken();
             if (token == null) {
-                setErro("return type expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NRO")) {
                 
@@ -876,17 +817,15 @@ public class AcoesSemanticas {
                 relationalExp();
             }
         } else {
-            setErro(token.getLinha(), "return expected");
-            //erro();
+            //erro sintatico
         }
 
         if (token == null) {
-            setErro("; expected");
+            //erro sintatico
         } else if (token.getLexema().equals(";")) {
             token = proximoToken();
         } else {
-            setErro(token.getLinha(), "; expected");
-            //erro();
+            //erro sintatico
         }
 
     }
@@ -895,62 +834,57 @@ public class AcoesSemanticas {
     private void ifStatemant() throws IOException {
 
         if (token == null) {
-            setErro("if expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("if")) {
             token = proximoToken();
 
             if (token == null) {
-                setErro("( expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
                 commandsExp();
             } else {
-                setErro(token.getLinha(), "( expected");
-                //erro("");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(") expected");
+                //erro sintatico
                 return;
             }
             if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), ") expected");
-                //erro();
+                //erro sintatico
             }
             if (token == null) {
-                setErro("then expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("then")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "then expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 commands();
             } else {
-                setErro(token.getLinha(), "{ expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
                 elseStatemant();
             } else {
-                setErro(token.getLinha(), "} expected");
-                //erro();
+                //erro sintatico
             }
 
         }
@@ -960,87 +894,80 @@ public class AcoesSemanticas {
     private void elseStatemant() throws IOException {
 
         if (token == null) {
-            setErro("else expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("else")) {
             token = proximoToken();
 
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 commands();
             } else {
-                setErro(token.getLinha(), "{ expected");
-                //erro("");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
-                //erro();
+                //erro sintatico
             }
 
         } else if (token.getLexema().equals("return") || token.getLexema().equals("}")) {
             //vazio  
         } else {
-            setErro(token.getLinha(), "else or } expected");
-            //erro();
+            //erro sintatico
         }
     }
 //*************** WHILE STATEMANT ***********************************************************
 
     private void whileStatemant() throws IOException {
         if (token == null) {
-            setErro("while expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("while")) {
             token = proximoToken();
             if (token == null) {
-                setErro("( expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
                 commandsExp();
             } else {
-                setErro(token.getLinha(), "( expected");
-                //erro("");
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(") expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), ") expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("{ expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("{")) {
                 token = proximoToken();
                 commands();
             } else {
-                setErro(token.getLinha(), "{ expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("} expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("}")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "} expected");
-                //erro();
+                //erro sintatico
             }
         }
     }
@@ -1048,46 +975,42 @@ public class AcoesSemanticas {
 
     private void readStatemant() throws IOException {
         if (token == null) {
-            setErro("read expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("read")) {
             token = proximoToken();
         } else {
-            setErro(token.getLinha(), "read expected");
-            //erro();
+            //erro sintatico
         }
 
         if (token == null) {
-            setErro("( expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("(")) {
             token = proximoToken();
             readParams();
         } else {
-            setErro(token.getLinha(), "( expected");
-            //erro();
+            //erro sintatico
         }
 
         if (token == null) {
-            setErro(") expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(")")) {
             token = proximoToken();
 
         } else {
-            setErro(token.getLinha(), ") expected");
-            //erro();
+            //erro sintatico
         }
 
         if (token == null) {
-            setErro("; expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(";")) {
             token = proximoToken();
 
         } else {
-            setErro(token.getLinha(), "; expected");
-            //erro();
+            //erro sintatico
         }
 
     }
@@ -1099,7 +1022,7 @@ public class AcoesSemanticas {
 
     private void moreReadParams() throws IOException {
         if (token == null) {
-            setErro("more params or ) expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
@@ -1107,8 +1030,7 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals(")")) {
             //vazio
         } else {
-            setErro(token.getLinha(), "more params or ) expected");
-            //erro();
+            //erro sintatico
         }
 
     }
@@ -1116,50 +1038,47 @@ public class AcoesSemanticas {
 //*************** PRINT STATEMANT **********************************************************
     private void printStatemant() throws IOException {
         if (token == null) {
-            setErro("print expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("print")) {
             token = proximoToken();
         }
 
         if (token == null) {
-            setErro("( expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("(")) {
             token = proximoToken();
             printParams();
         } else {
-            setErro(token.getLinha(), "( expected");
-            //erro();
+            //erro sintatico
         }
 
         if (token == null) {
-            setErro(") expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(")")) {
             token = proximoToken();
 
         } else {
-            setErro(token.getLinha(), ") expected");
-            //erro();
+            //erro sintatico
         }
 
         if (token == null) {
-            setErro("; expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(";")) {
             token = proximoToken();
 
         } else {
-            setErro(token.getLinha(), "; expected");
-            //erro();
+            //erro sintatico
         }
 
     }
 
     private void printParams() throws IOException {
         if (token == null) {
-            setErro("print params expected");
+            //erro sintatico
             return;
         }
         printParam();
@@ -1169,21 +1088,20 @@ public class AcoesSemanticas {
 
     private void printParam() throws IOException {
         if (token == null) {
-            setErro("print params expected");
+            //erro sintatico
             return;
         } else if (token.getTipo().equals("CDC")) {
             token = proximoToken();
         } else if (token.getTipo().equals("IDE") || token.getLexema().equals("local") || token.getLexema().equals("global")) {
             callVariable();
         } else {
-            setErro(token.getLinha(), "print params expected");
-            //erro();
+            //erro sintatico
         }
     }
 
     private void morePrintParams() throws IOException {
         if (token == null) {
-            setErro(" more print params or ) expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
@@ -1191,37 +1109,33 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals(")")) {
             //vazio
         } else {
-            setErro(token.getLinha(), " more print params or ) expected");
-            //erro();
+            //erro sintatico
         }
     }
 //*************** ASSIGNMENT **********************************************************************
 
     private void assignment() throws IOException {
         if (token == null) {
-            setErro("expression expected");
+            //erro sintatico
             return;
         } else if (token.getTipo().equals("IDE") || token.getLexema().equals("local") || token.getLexema().equals("global")) {
             callVariable();
             if (token == null) {
-                setErro("= expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("=")) {
                 token = proximoToken();
                 assign2();
             } else {
-                setErro(token.getLinha(), "= expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("; expected");
-                return;
+                //erro sintatico
             } else if (token.getLexema().equals(";")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "; expected");
-                //erro();
+                //erro sintatico
             }
 
         } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
@@ -1231,13 +1145,12 @@ public class AcoesSemanticas {
             unaryOp();
 
             if (token == null) {
-                setErro("; expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(";")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "; expected");
-                //erro();
+                //erro sintatico
             }
         } else {
 
@@ -1247,7 +1160,7 @@ public class AcoesSemanticas {
 
     private void assign2() throws IOException {
         if (token == null) {
-            setErro("expression expected");
+            //erro sintatico
             return;
         } else if (token.getTipo().equals("IDE") || token.getLexema().equals("global") || token.getLexema().equals("local")) {
             token = proximoToken();
@@ -1260,15 +1173,14 @@ public class AcoesSemanticas {
         } else if (token.getTipo().equals("NRO")) {
             token = proximoToken();
         } else {
-            setErro(token.getLinha(), "expression identifier or string expected");
-            //erro();
+            //erro sintatico
         }
     }
 
 //*************** EXPRESSION **********************************************************************
     private void expression() throws IOException {
         if (token == null) {
-            setErro("expression expected");
+            //erro sintatico
             return;
             // logical ou aritmetic
         }
@@ -1279,20 +1191,19 @@ public class AcoesSemanticas {
 //*************** RELATIONAL EXPRESSION ***********************************************************    
     private void relationalExp() throws IOException {
         if (token == null) {
-            setErro("expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("(")) {
             token = proximoToken();
             logicalExp();
 
             if (token == null) {
-                setErro(") expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), ") expected");
-                //erro();
+                //erro sintatico
             }
         } else {
             aritmeticExp();
@@ -1303,7 +1214,7 @@ public class AcoesSemanticas {
 //*************** OPT LOGICAL EXPRESSION ***********************************************************   
     private void optLogicalExp() throws IOException {
         if (token == null) {
-            setErro("&& or || expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("&&") || token.getLexema().equals("||")) {
             token = proximoToken();
@@ -1311,15 +1222,14 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals(")")) {
             //vazio  
         } else {
-            setErro(token.getLinha(), "&& or || expected");
-            //erro();
+            //erro sintatico
         }
     }
 
 //*************** LOGICAL EXPRESSION ***************************************************************     
     private void logicalExp() throws IOException {
         if (token == null) {
-            setErro(" relational op expected");
+            //erro sintatico
             return;
         }
         relationalExp();
@@ -1329,7 +1239,7 @@ public class AcoesSemanticas {
 //*************** POSS REL EXPRESSION ***************************************************************
     private void possRelExp() throws IOException {
         if (token == null) {
-            setErro("!= == > < >= <= expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(">") || token.getLexema().equals("<") || token.getLexema().equals(">=")
                 || token.getLexema().equals("<=")) {
@@ -1344,15 +1254,14 @@ public class AcoesSemanticas {
             equalityExp();
 
         } else {
-            setErro(token.getLinha(), "!= == > < >= <=  expected");
-            //erro();
+            //erro sintatico
         }
     }
 
 //*************** EQUALITY EXPRESSION ***************************************************************
     private void equalityExp() throws IOException {
         if (token == null) {
-            setErro("> < >= <= expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("!=") || token.getLexema().equals("==")) {
             token = proximoToken();
@@ -1362,8 +1271,7 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals(")") || token.getLexema().equals("&&") || token.getLexema().equals("||")) {
             // vazio
         } else {
-            setErro(token.getLinha(), "> < >= <= expected");
-            //erro();
+            //erro sintatico
         }
 
     }
@@ -1371,7 +1279,7 @@ public class AcoesSemanticas {
 //*************** INEQUALITY EXPRESSION ***************************************************************
     private void inequalityExp() throws IOException {
         if (token == null) {
-            setErro("> < >= <= expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(">") || token.getLexema().equals("<") || token.getLexema().equals(">=")
                 || token.getLexema().equals("<=")) {
@@ -1383,28 +1291,26 @@ public class AcoesSemanticas {
                 || token.getLexema().equals("==") || token.getLexema().equals("!=")) {
             // vazio
         } else {
-            setErro(token.getLinha(), "> < >= <= expected");
-            //erro();
+            //erro sintatico
         }
     }
 
 //*************** ARITIMETIC EXPRESSION ***************************************************************
     private void aritmeticExp() throws IOException {
         if (token == null) {
-            setErro("Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
+            //erro sintatico
             return;
             //primeiro unary Op
         } else if (token.getLexema().equals("(")) {
             token = proximoToken();
             relationalExp();
             if (token == null) {
-                setErro(") expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), ") expected");
-                //erro();
+                //erro sintatico
             }
 
         } else {
@@ -1416,7 +1322,7 @@ public class AcoesSemanticas {
 //*************** OPERATION ***************************************************************************
     private void operation() throws IOException {
         if (token == null) {
-            setErro("Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
+            //erro sintatico
             return;
         }
         opUnary();
@@ -1426,7 +1332,7 @@ public class AcoesSemanticas {
 //*************** OP SUM  *****************************************************************************
     private void opSum() throws IOException {
         if (token == null) {
-            setErro("+ or - expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("+") || token.getLexema().equals("-")) {
             token = proximoToken();
@@ -1441,15 +1347,14 @@ public class AcoesSemanticas {
 
             //vazio           
         } else {
-            setErro(token.getLinha(), "+ or - expected");
-            //erro();
+            //erro sintatico
         }
     }
 
 //*************** OP MULTIPLICATION *******************************************************************
     private void opMultiplication() throws IOException {
         if (token == null) {
-            setErro("/ or * expected");
+            //erro sintatico
             return;
 
         } else if (token.getLexema().equals("/") || token.getLexema().equals("*")) {
@@ -1462,15 +1367,14 @@ public class AcoesSemanticas {
                 || token.getLexema().equals(")")) {
             //vazio
         } else {
-            setErro(token.getLinha(), "/ or * expected");
-            //erro();
+            //erro sintatico
         }
     }
 
 //*************** OP UNARY ***************************************************************************
     private void opUnary() throws IOException {
         if (token == null) {
-            setErro("Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("global") || token.getLexema().equals("local")
                 || token.getTipo().equals("IDE") || token.getLexema().equals("++") || token.getLexema().equals("--")
@@ -1490,24 +1394,22 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals("(")) {
             aritmeticExp();
             if (token == null) {
-                setErro(") expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), ") expected");
-                //erro();
+                //erro sintatico
             }
         } else {
-            setErro(token.getLinha(), "Unary OP, \"!\", number, booleans, modifiers, identifiers or \"(\" expected");
-            //erro();
+            //erro sintatico
         }
     }
 
 //*************** UNARY OP ***************************************************************************
     private void unaryOp() throws IOException {
         if (token == null) {
-            setErro("Unary OP, num, booleans, modifiers or identifiers expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("++") || token.getLexema().equals("--")) {
             token = proximoToken();
@@ -1517,7 +1419,7 @@ public class AcoesSemanticas {
                 || token.getTipo().equals("NRO")) {
             finalValue();
             if (token == null) {
-                setErro("++ or -- expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("++") || token.getLexema().equals("--")) {
                 token = proximoToken();
@@ -1526,8 +1428,7 @@ public class AcoesSemanticas {
             token = proximoToken();
             callVariable();
         } else {
-            setErro(token.getLinha(), "Unary OP, num, booleans, modifiers or identifiers expected");
-            //erro();
+            //erro sintatico
         }
 
     }
@@ -1535,7 +1436,7 @@ public class AcoesSemanticas {
 //*************** FINAL VALUE ************************************************************************
     private void finalValue() throws IOException {
         if (token == null) {
-            setErro("expected");
+            //erro sintatico
             return;
         }
         if (token.getLexema().equals("global") || token.getLexema().equals("local") || token.getTipo().equals("IDE")) {
@@ -1543,20 +1444,16 @@ public class AcoesSemanticas {
         } else if (token.getTipo().equals("NRO") || token.getLexema().equals("true") || token.getLexema().equals("false")) {
             token = proximoToken();
         } else {
-            setErro(token.getLinha(), "final value expected");
-            //erro();
+            //erro sintatico
         }
     }
 
 //*************** CALL VARIABLE **********************************************************************
     private void callVariable() throws IOException {
         if (token == null) {
-            setErro("Identifier or Modifiers expected");
+            //erro sintatico
         }
         modifier();
-        if (token == null) {
-            return;
-        }
         paths();
     }
 //*************** MODIFIER ***************************************************************************
@@ -1565,12 +1462,12 @@ public class AcoesSemanticas {
         if (token.getLexema().equals("global") || token.getLexema().equals("local")) {
             token = proximoToken();
             if (token == null) {
-                setErro(". expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(".")) {
                 token = proximoToken();
                 if (token == null) {
-                    setErro("IDE expected");
+                    //erro sintatico
                     return;
                 } else if (token.getTipo().equals("IDE")) {
                     token = proximoToken();
@@ -1583,7 +1480,7 @@ public class AcoesSemanticas {
 
     private void paths() throws IOException {
         if (token == null) {
-            setErro("expected ");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(".")) {
             struct();
@@ -1594,64 +1491,59 @@ public class AcoesSemanticas {
                 || token.getLexema().equals(")") || token.getLexema().equals("*") || token.getLexema().equals("/")) {
             //vazio
         } else {
-            setErro(token.getLinha(), "expected");
+            //erro sintatico
         }
 
     }
 
     private void struct() throws IOException {
         if (token == null) {
-            setErro("");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(".")) {
             token = proximoToken();
         } else {
-            setErro(token.getLinha(), ". expected");
-            //erro();
+            //erro sintatico
         }
 
         if (token == null) {
-            setErro("Identifier expected");
+            //erro sintatico
             return;
         } else if (token.getTipo().equals("IDE")) {
             token = proximoToken();
             paths();
         } else {
-            setErro(token.getLinha(), "Identifier expected");
-            //erro();
+            //erro sintatico
         }
     }
 
     private void matrAssign() throws IOException {
         if (token == null) {
-            setErro("[ expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("[")) {
             token = proximoToken();
             if (token == null) {
-                setErro("number or modifier expected");
+                //erro sintatico
                 return;
             } else if (token.getTipo().equals("NRO")) {
                 token = proximoToken();
             } else if (token.getLexema().equals("global") || token.getLexema().equals("local") || token.getTipo().equals("IDE")) {
                 callVariable();
             } else {
-                setErro(token.getLinha(), "number or modifier expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro("] expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("]")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), "] expected");
-                //erro();
+                //erro sintatico
             }
         } else {
-            setErro(token.getLinha(), "[ expected");
-            //erro();
+            //erro sintatico
         }
         paths();
     }
@@ -1659,39 +1551,36 @@ public class AcoesSemanticas {
 
     private void callProcedureFunction() throws IOException {
         if (token == null) {
-            setErro("identifier expected");
+            //erro sintatico
             return;
         } else if (token.getTipo().equals("IDE")) {
             token = proximoToken();
             if (token == null) {
-                setErro("( expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
                 realParamList();
             } else {
-                setErro(token.getLinha(), "( expected");
-                //erro();
+                //erro sintatico
             }
 
             if (token == null) {
-                setErro(") expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals(")")) {
                 token = proximoToken();
             } else {
-                setErro(token.getLinha(), ") expected");
-                //erro();
+                //erro sintatico
             }
         } else {
-            setErro(token.getLinha(), "identifier expected");
-            //erro();
+            //erro sintatico
         }
     }
 
     private void realParamList() throws IOException {
         if (token == null) {
-            setErro("values param or modifiers expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NRO")
                 || token.getTipo().equals("CDC") || token.getTipo().equals("IDE") || token.getLexema().equals("global")
@@ -1702,8 +1591,7 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals(")")) {
             //vazio           
         } else {
-            setErro(token.getLinha(), "values param or modifiers expected");
-            //erro();
+            //erro sintatico
         }
     }
 
@@ -1724,12 +1612,12 @@ public class AcoesSemanticas {
 
     private void moreRealParam() throws IOException {
         if (token == null) {
-            setErro(") expected");
+            //erro sintatico
             return;
         } else if (token.getLexema().equals(",")) {
             token = proximoToken();
             if (token == null) {
-                setErro("values param or modifiers expected");
+                //erro sintatico
                 return;
             } else if (token.getLexema().equals("true") || token.getLexema().equals("false") || token.getTipo().equals("NRO")
                     || token.getTipo().equals("CDC") || token.getTipo().equals("IDE") || token.getLexema().equals("global")
@@ -1740,14 +1628,13 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals(")")) {
             //vazio
         } else {
-            setErro(token.getLinha(), ") expected");
-            //erro();
+            //erro sintatico
         }
     }
 
     private void valueParam() throws IOException {
         if (token == null) {
-            setErro(") or params expected");
+            //erro sintatico
             return;
         } else if (token.getTipo().equals("NRO")) {
             token = proximoToken();
@@ -1756,8 +1643,7 @@ public class AcoesSemanticas {
         } else if (token.getLexema().equals("true") || token.getLexema().equals("false")) {
             token = proximoToken();
         } else {
-            setErro(token.getLinha(), ") or params expected");
-            //erro();
+            //erro sintatico
         }
     }
 }

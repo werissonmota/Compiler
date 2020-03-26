@@ -1,1 +1,2 @@
 Line 70 semantic error: var, const, function or procedures expected
+Line 70 semantic error: function or procedure expected
