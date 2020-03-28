@@ -17,7 +17,11 @@ var { int birulau, concrete;
 
 
 procedure start(){
-       var { int j;}
+       var { int j;
+			struct structStart {
+			var{int x;}
+			}
+			}
 	   read(a);
 	   print(a);
 	   i = 5;
@@ -37,7 +41,7 @@ procedure start(){
 	
 }
 
-function int fnctsss(int t){
+function int fnctsss(int t, string d){
        var { int ggg;
 	     struct sctructxx{
               var {int testaEscopo;}
@@ -63,7 +67,7 @@ function int fnctsss(int t){
 	return 0;
 }
 
-function boolean funct2(boolean x, int aux){
+function boolean funct2(boolean x, int aux, char t){
 var{ int tameImpala;}
 
 return true;

@@ -41,10 +41,11 @@ public class Parser {
     ArrayList<VarTemporaria> structTemporarias;
     ArrayList<FuncProcTemporaria> funcProcTemporarias;
     ArrayList<Param> paramsTemporarios;
+    ArrayList paramsStrTemporarios;
     VarTemporaria varTemp;
     FuncProcTemporaria funcProcTemp;
     Param paramTemp;
-    String typeVar,paramsString,escopoTemp;
+    String typeVar,escopoTemp;
     Stack<String> escopo;
 
     public Parser(ArrayList<Token> a, int num) throws FileNotFoundException {
@@ -60,7 +61,7 @@ public class Parser {
         funcProcTemporarias = new <FuncProcTemporaria>ArrayList();
         this.escopo = new <String>Stack();
         this.escopo.push("global");
-        this.paramsString = "";
+        
     }
 
     public void preencheTabSimbolos() {
@@ -205,6 +206,15 @@ public class Parser {
     private boolean isType(Token t) {
         return (t.getLexema().equals("int") || t.getLexema().equals("real") || t.getLexema().equals("boolean") || t.getLexema().equals("string")) ? true : false;
 
+    }
+    
+    private String parametros(ArrayList e){
+        String aux = "";
+        Iterator it = e.iterator();
+        while(it.hasNext()){
+            aux = aux+(String)it.next();
+        }
+        return aux;
     }
 //********************** INICIO DOS PROCEDIMENTOS ***************************************
 
@@ -683,8 +693,9 @@ public class Parser {
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
                 paramsTemporarios = new <Param>ArrayList();
+                paramsStrTemporarios = new ArrayList();
                 paramList();
-                escopo.push(escopoTemp+paramsString);
+                escopo.push(escopoTemp+parametros(paramsStrTemporarios));           
                 funcProcTemp.setListParams(paramsTemporarios);
                 funcProcTemporarias.add(funcProcTemp);
             } else {
@@ -773,8 +784,9 @@ public class Parser {
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
                 paramsTemporarios = new <Param>ArrayList();
+                paramsStrTemporarios = new ArrayList();
                 paramList();
-                escopo.push(escopoTemp+paramsString);
+                escopo.push(escopoTemp+parametros(paramsStrTemporarios));
                 funcProcTemp.setListParams(paramsTemporarios);
                 funcProcTemporarias.add(funcProcTemp);
             } else {
@@ -849,7 +861,7 @@ public class Parser {
             setErro("Type expected");
             return;
         } else if (isType(token) || token.getTipo().equals("IDE")) {
-            paramsString = "@"+token.getLexema();
+            paramsStrTemporarios.add("@"+token.getLexema());
             paramTemp = new Param(token.getLexema());
             token = proximoToken();
 

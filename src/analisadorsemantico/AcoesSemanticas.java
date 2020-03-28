@@ -30,7 +30,8 @@ public class AcoesSemanticas {
     Token token;    
     HashMap<String, Object> tabSimbolos;
     Stack<String> escopo;
-    
+    String escopoTemp;
+    ArrayList paramsStrTemporarios;
 
     public AcoesSemanticas(ArrayList<Token> arrayDeTokens, int num, HashMap <String,Object>tabSimbolos) throws FileNotFoundException {        
         pilhaTokens = new <Token>Stack();
@@ -40,14 +41,15 @@ public class AcoesSemanticas {
         this.fos = new FileOutputStream(arquivoSaida);
         this.escopo = new <String>Stack();
         this.escopo.push("global");
-        /*
+        
+        
         Iterator it = tabSimbolos.keySet().iterator();
         while(it.hasNext()){
             String d;
             d = (String) it.next();
             System.out.println(d);
-        }
-        */
+        } 
+        
     }
     
     
@@ -138,6 +140,15 @@ public class AcoesSemanticas {
     private boolean varExist(String id, String escopo){
         tabSimbolos.get(escopo);
         return true;
+    }
+    
+    private String parametros(ArrayList e){
+        String aux = "";
+        Iterator it = e.iterator();
+        while(it.hasNext()){
+            aux = aux+(String)it.next();
+        }
+        return aux;
     }
 //********************** INICIO DOS PROCEDIMENTOS ***************************************
 
@@ -571,7 +582,7 @@ public class AcoesSemanticas {
             if (token == null) {
                 //erro sintatico
                 return;
-            } else if (isType(token) || token.getTipo().equals("IDE")) {
+            } else if (isType(token) || token.getTipo().equals("IDE")) {                
                 token = proximoToken();
             } else {
                 //erro sintatico
@@ -580,6 +591,7 @@ public class AcoesSemanticas {
                 //erro sintatico
                 return;
             } else if (token.getTipo().equals("IDE")) {
+                escopoTemp = token.getLexema();
                 token = proximoToken();
             } else {
                 //erro sintatico
@@ -589,7 +601,10 @@ public class AcoesSemanticas {
                 return;
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
+                paramsStrTemporarios = new ArrayList();
                 paramList();
+                escopo.push(escopoTemp+parametros(paramsStrTemporarios)); 
+                System.out.println(escopo.peek());
             } else {
                 //erro sintatico
             }
@@ -668,7 +683,9 @@ public class AcoesSemanticas {
                 return;
             } else if (token.getLexema().equals("(")) {
                 token = proximoToken();
+                paramsStrTemporarios = new ArrayList();
                 paramList();
+                escopo.push(escopoTemp+parametros(paramsStrTemporarios));
             } else {
                 //erro sintatico
             }
@@ -739,6 +756,7 @@ public class AcoesSemanticas {
             //erro sintatico
             return;
         } else if (isType(token)) {
+            paramsStrTemporarios.add("@"+token.getLexema());
             token = proximoToken();
             if (token == null) {
                 //erro sintatico

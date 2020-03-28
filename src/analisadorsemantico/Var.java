@@ -10,21 +10,23 @@ package analisadorsemantico;
  * @author Aurelio
  */
 public class Var {
+
     private String id;
     private String type;
     private String escopo;
     private String value;
-    
-    
-    
-    public Var(){
-        
+    private boolean wasDeclared;
+
+    public Var() {
+        this.wasDeclared = false;
     }
-   public Var(String type, String id, String escopo){
-      this.id = id;
-      this.escopo = escopo;
-      this.type = type;
-   }
+
+    public Var(String type, String id, String escopo) {
+        this.id = id;
+        this.escopo = escopo;
+        this.type = type;
+        this.wasDeclared = false;
+    }
 
     /**
      * @return the id
@@ -82,6 +84,18 @@ public class Var {
         this.value = value;
     }
 
-  
-    
+    /**
+     * @return the wasDeclared
+     */
+    public boolean wasDeclared() {
+        return wasDeclared;
+    }
+
+    /**
+     * @param wasDeclared the wasDeclared to set
+     */
+    public void setWasDeclared(boolean wasDeclared) {
+        this.wasDeclared = wasDeclared;
+    }
+
 }

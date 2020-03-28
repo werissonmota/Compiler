@@ -51,4 +51,8 @@ public class Composta extends Var{
     public void setListVars(ArrayList<Object> listVars) {
         this.listVars = listVars;
     }
+
+  
+
+  
 }
