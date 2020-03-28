@@ -153,7 +153,7 @@ public class AcoesSemanticas {
 //********************** INICIO DOS PROCEDIMENTOS ***************************************
 
     private void start() throws IOException {
-
+        System.out.println("oooooooooooooooooooooooi");
         globalValues();       
         functionsProcedures();
     }
@@ -166,7 +166,7 @@ public class AcoesSemanticas {
             return;
         } else if (token.getLexema().equals("var")) {
             token = proximoToken();
-            
+            System.out.println("oooooooooooooooooooooooi");
             if (token == null) {
                 //erro sintatico
                 return;
