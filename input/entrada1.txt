@@ -9,9 +9,9 @@ var { int birulau, concrete;
       real x;
       int array[2], array1[3];
       int matriz[2][2], matriz2[2][3]; 
-      typedef struct dd extends hb20{ var { int j;} }
-      struct dd1 { var { int j;} }
-      typedef struct xandAviao extends cleitonRasta{
+      typedef struct structdd extends hb20{ var { int j;} }
+      struct structdd1 { var { int j;} }
+      typedef struct structxandAviao extends cleitonRasta{
       var { boolean dsa;} } 
 }
 
@@ -37,9 +37,9 @@ procedure start(){
 	
 }
 
-function int sss(int t){
+function int fnctsss(int t){
        var { int ggg;
-	     struct xx{
+	     struct sctructxx{
               var {int testaEscopo;}
 	     }
 		 
@@ -63,7 +63,7 @@ function int sss(int t){
 	return 0;
 }
 
-function boolean function2(boolean x, int aux){
+function boolean funct2(boolean x, int aux){
 var{ int tameImpala;}
 
 return true;

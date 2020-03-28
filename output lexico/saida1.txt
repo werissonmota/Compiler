@@ -75,7 +75,7 @@
 11 DEL ;
 12 PRE typedef
 12 PRE struct
-12 IDE dd
+12 IDE structdd
 12 PRE extends
 12 IDE hb20
 12 DEL {
@@ -87,7 +87,7 @@
 12 DEL }
 12 DEL }
 13 PRE struct
-13 IDE dd1
+13 IDE structdd1
 13 DEL {
 13 PRE var
 13 DEL {
@@ -98,7 +98,7 @@
 13 DEL }
 14 PRE typedef
 14 PRE struct
-14 IDE xandAviao
+14 IDE structxandAviao
 14 PRE extends
 14 IDE cleitonRasta
 14 DEL {
@@ -163,7 +163,7 @@
 38 DEL }
 40 PRE function
 40 PRE int
-40 IDE sss
+40 IDE fnctsss
 40 DEL (
 40 PRE int
 40 IDE t
@@ -175,7 +175,7 @@
 41 IDE ggg
 41 DEL ;
 42 PRE struct
-42 IDE xx
+42 IDE sctructxx
 42 DEL {
 43 PRE var
 43 DEL {
@@ -230,7 +230,7 @@
 64 DEL }
 66 PRE function
 66 PRE boolean
-66 IDE function2
+66 IDE funct2
 66 DEL (
 66 PRE boolean
 66 IDE x

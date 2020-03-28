@@ -6,6 +6,7 @@
 package analisadorsemantico;
 
 import java.util.ArrayList;
+import java.util.Iterator;
 
 /**
  *
@@ -22,7 +23,18 @@ public class FuncProcTemporaria {
       this.type = type;
       this.escopo = escopo;      
     }
-
+    
+    
+    
+    public String getParams(){
+        String aux = "";
+        Iterator it = listParams.iterator();
+        while(it.hasNext()){
+            Param par = (Param)it.next();
+            aux = aux+"@"+par.getType();
+        }
+        return aux;               
+    }
     /**
      * @return the id
      */

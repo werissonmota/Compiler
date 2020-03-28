@@ -40,6 +40,14 @@ public class AcoesSemanticas {
         this.fos = new FileOutputStream(arquivoSaida);
         this.escopo = new <String>Stack();
         this.escopo.push("global");
+        /*
+        Iterator it = tabSimbolos.keySet().iterator();
+        while(it.hasNext()){
+            String d;
+            d = (String) it.next();
+            System.out.println(d);
+        }
+        */
     }
     
     

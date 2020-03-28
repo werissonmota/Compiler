@@ -6,7 +6,6 @@ import analisadorsemantico.Composta;
 import analisadorsemantico.Const;
 import analisadorsemantico.FuncProcTemporaria;
 import analisadorsemantico.FunctionProcedure;
-import analisadorsemantico.FunctionProcedureValues;
 import analisadorsemantico.GlobalValues;
 import analisadorsemantico.Param;
 import analisadorsemantico.Var;
@@ -45,7 +44,7 @@ public class Parser {
     VarTemporaria varTemp;
     FuncProcTemporaria funcProcTemp;
     Param paramTemp;
-    String typeVar;
+    String typeVar,paramsString,escopoTemp;
     Stack<String> escopo;
 
     public Parser(ArrayList<Token> a, int num) throws FileNotFoundException {
@@ -61,6 +60,7 @@ public class Parser {
         funcProcTemporarias = new <FuncProcTemporaria>ArrayList();
         this.escopo = new <String>Stack();
         this.escopo.push("global");
+        this.paramsString = "";
     }
 
     public void preencheTabSimbolos() {
@@ -70,6 +70,13 @@ public class Parser {
             vt.setListVars(getVarsByScope(vt.getId()));
         }
         
+        it = structTemporarias.iterator();
+         while (it.hasNext()) {
+            VarTemporaria vt = (VarTemporaria) it.next();
+            tabSimbolos.put(vt.getId()+"@"+vt.getEscopo(), new Composta(vt.getType(),vt.getId(),vt.getEscopo()
+                    ,vt.getParent(),vt.getListVars()));
+        }
+         
         Iterator it2 = funcProcTemporarias.iterator();
         while (it2.hasNext()) {
             FuncProcTemporaria fct = (FuncProcTemporaria) it2.next();
@@ -86,17 +93,9 @@ public class Parser {
         
         it2 = funcProcTemporarias.iterator();
         while (it2.hasNext()) {
-            FuncProcTemporaria fct = (FuncProcTemporaria) it2.next();
-            if(tabSimbolos.containsKey(fct.getId())){
-                
-                FunctionProcedureValues fpv = (FunctionProcedureValues) tabSimbolos.get(fct.getId());
-                fpv.add(fct.getListParams(),
-                        new FunctionProcedure(fct.getType(), fct.getId(),fct.getListParams(),fct.getListVars()));
-               
-            }else{
-                tabSimbolos.put(fct.getId(),new FunctionProcedureValues(fct.getListParams(),
-                        new FunctionProcedure(fct.getType(), fct.getId(),fct.getListParams(),fct.getListVars())));
-            }
+            FuncProcTemporaria fct = (FuncProcTemporaria) it2.next();           
+            tabSimbolos.put(fct.getId()+fct.getParams(),
+                        new FunctionProcedure(fct.getType(), fct.getId(),fct.getListParams(),fct.getListVars()));            
         }    
         
     }
@@ -671,7 +670,7 @@ public class Parser {
                 setErro("Identifier expected");
                 return;
             } else if (token.getTipo().equals("IDE")) {
-                escopo.push(token.getLexema());
+                escopoTemp = token.getLexema();
                 funcProcTemp.setId(token.getLexema());
                 token = proximoToken();
             } else {
@@ -685,6 +684,7 @@ public class Parser {
                 token = proximoToken();
                 paramsTemporarios = new <Param>ArrayList();
                 paramList();
+                escopo.push(escopoTemp+paramsString);
                 funcProcTemp.setListParams(paramsTemporarios);
                 funcProcTemporarias.add(funcProcTemp);
             } else {
@@ -760,7 +760,7 @@ public class Parser {
                 return;
             } else if (token.getTipo().equals("IDE") || token.getLexema().equals("start")) {
                 funcProcTemp = new FuncProcTemporaria(" ", escopo.peek());
-                escopo.push(token.getLexema());
+                escopoTemp = token.getLexema();
                 funcProcTemp.setId(token.getLexema());
                 token = proximoToken();
             } else {
@@ -774,6 +774,7 @@ public class Parser {
                 token = proximoToken();
                 paramsTemporarios = new <Param>ArrayList();
                 paramList();
+                escopo.push(escopoTemp+paramsString);
                 funcProcTemp.setListParams(paramsTemporarios);
                 funcProcTemporarias.add(funcProcTemp);
             } else {
@@ -848,6 +849,7 @@ public class Parser {
             setErro("Type expected");
             return;
         } else if (isType(token) || token.getTipo().equals("IDE")) {
+            paramsString = "@"+token.getLexema();
             paramTemp = new Param(token.getLexema());
             token = proximoToken();
 
